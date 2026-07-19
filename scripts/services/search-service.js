@@ -135,6 +135,8 @@
         name: parts.length ? `${parts.join("")}附近地點` : "所選位置附近地點",
         area: areaName,
         landmark: landmarkName,
+        areaPlace: area,
+        landmarkPlace: landmark,
         areaDistance,
         landmarkDistance
       };

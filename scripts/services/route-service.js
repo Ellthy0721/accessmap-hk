@@ -2141,7 +2141,10 @@
           destinationEn: pattern.destEn || pattern.destinationEn || "",
           fromName: stopName(segmentStops[0]),
           toName: stopName(segmentStops[segmentStops.length - 1]),
+          fromNameEn: segmentStops[0].nameEn || "",
+          toNameEn: segmentStops[segmentStops.length - 1].nameEn || "",
           stops: segmentStops.map(stopName),
+          stopsEn: segmentStops.map((stop) => stop.nameEn || ""),
           geometry: tdGeometry || providerGeometry,
           geometrySource: tdGeometry ? "td-stop-sequence" : "provider-stop-sequence",
           localPatternGeometry,
@@ -2223,6 +2226,8 @@
         to: config.accessPlace,
         fromName: config.start.name,
         toName: config.accessPlace.name,
+        fromNameEn: config.start.nameEn || "",
+        toNameEn: config.accessPlace.nameEn || "",
         color: COLORS.walk
       };
       const egressWalk = {
@@ -2232,6 +2237,8 @@
         to: endPlace,
         fromName: config.egressPlace.name,
         toName: config.end.name,
+        fromNameEn: config.egressPlace.nameEn || "",
+        toNameEn: config.end.nameEn || "",
         color: COLORS.walk,
         fromMtrExit: config.selectedEgressExit || null,
         mtrExitStatus: config.mtrExitStatus || ""
@@ -2329,7 +2336,18 @@
           minutes: Math.max(1, Math.round(segment.minutes || 0)),
           startMinute,
           color,
-          meta: segment.mode === "walk" ? `${formatDistance(segment.distance || 0)}，約 ${Math.max(1, Math.round(segment.minutes || 0))} 分鐘` : stopText,
+         meta: segment.mode === "walk" ? `${formatDistance(segment.distance || 0)}，約 ${Math.max(1, Math.round(segment.minutes || 0))} 分鐘` : stopText,
+          destinationEn: segment.destinationEn || "",
+          fromNameEn: segment.fromNameEn || "",
+          toNameEn: segment.toNameEn || "",
+          stopsEn: segment.stopsEn || [],
+          waitMinutes: wait,
+          rideMinutes: ride,
+          stopCount,
+          metrics: segment.metrics || null,
+          operationConfidence: segment.operationConfidence || "",
+          etaConfirmed: Boolean(segment.etaConfirmed),
+          etaChecked: Boolean(segment.etaChecked),
           metaDetail: segment.mode === "walk" ? walkMetricText(segment.metrics) : "",
           etaTime: segment.etaTime || "",
           etaStatus: segment.etaStatus || "",
@@ -3174,10 +3192,13 @@
           destination: mtrDirectionTerminal(line, first.from, last.to),
           fromName: stationName(from),
           toName: stationName(to),
+          fromNameEn: from?.nameEn || "",
+          toNameEn: to?.nameEn || "",
           line,
           fromCode: from?.code || first.from,
           toCode: to?.code || last.to,
           stops: stations.map(stationName),
+          stopsEn: stations.map((station) => station?.nameEn || ""),
           geometry: stations.map((station) => [station.lat, station.lng]),
           rideMinutes: Math.ceil(group.edges.reduce((sum, edge) => sum + (edge.minutes || 2), 0)),
           minutes: Math.ceil(group.edges.reduce((sum, edge) => sum + (edge.minutes || 2), 0)),
@@ -3202,10 +3223,13 @@
           destination: lightRailDirectionTerminal(route, first.from, last.to),
           fromName: lightRailStopName(from),
           toName: lightRailStopName(to),
+          fromNameEn: from?.nameEn || "",
+          toNameEn: to?.nameEn || "",
           fromCode: from?.code || first.from,
           toCode: to?.code || last.to,
           stationId: from?.id || from?.code || first.from,
           stops: stops.map(lightRailStopName),
+          stopsEn: stops.map((stop) => stop?.nameEn || ""),
           geometry: stops.map((stop) => [stop.lat, stop.lng]),
           rideMinutes: Math.ceil(group.edges.reduce((sum, edge) => sum + (edge.minutes || 2), 0)),
           minutes: Math.ceil(group.edges.reduce((sum, edge) => sum + (edge.minutes || 2), 0)),
@@ -3942,8 +3966,6 @@
     if (metrics.footbridges) parts.push(`附近有 ${metrics.footbridges} 座行人天橋結構`);
     if (metrics.stairs) parts.push(`${metrics.stairs} 段樓梯`);
     if (metrics.slopes) parts.push("沿途有斜坡");
-    if (metrics.entranceConnectionUnknown) parts.push("入口連接待確認");
-    if (metrics.endpointAccessUncertain) parts.push("所選位置接入步行路網待確認");
     if (metrics.fallback) parts.push("部分路段為保守估算");
     return parts.join("，");
   }

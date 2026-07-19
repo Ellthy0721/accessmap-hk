@@ -1,5 +1,7 @@
 (function () {
   "use strict";
+  const i18n = window.MapableI18n;
+  const t = (key, params) => i18n.t(key, params);
 
   const hkCenter = [22.3193, 114.1694];
   const LOCATION_REFRESH_INTERVAL_MS = 15000;
@@ -18,6 +20,7 @@
   const MOBILE_RESULTS_QUERY = "(max-width: 1120px) and (orientation: portrait)";
   const MOBILE_RESULTS_STATES = ["collapsed", "medium", "large", "expanded"];
   const places = [];
+  let placeLocalizationIndex = new Map();
 
   const knownRoutes = {
     "mtr-kot:fw-toilet": [[22.33738, 114.17457], [22.33752, 114.17442], [22.33772, 114.17425], [22.33796, 114.17402]],
@@ -26,8 +29,9 @@
     "mtr-tum:mtr-adm": [[22.39535, 113.97392], [22.39442, 113.97519], [22.337, 114.04], [22.27938, 114.1621], [22.27854, 114.1646]]
   };
 
-  const state = { profile: "senior", colorMode: "default", contrastMode: "standard", contrastModeBeforeLowVision: null, profileMeta: null, profileNotice: "", start: null, end: null, autoLocationStart: false, autoLocationStartEditing: false, pickMode: null, pendingMapPick: null, restoreResultsAfterPick: false, restorePlannerAfterPick: null, route: null, routeOptions: [], activeRouteIndex: 0, activeSegmentIndex: null, currentLocation: null, locationDenied: false, locationUnavailable: false, departureMode: "now", departureTime: null, departure: null, unavailableRoutes: [], activeFacilityLayer: null, babycareVisible: false, babycareData: null, publicFacilityData: null };
+  const state = { language: i18n.getLanguage(), resultStatus: "pending", profile: "senior", colorMode: "default", contrastMode: "standard", contrastModeBeforeLowVision: null, profileMeta: null, profileNotice: "", start: null, end: null, autoLocationStart: false, autoLocationStartEditing: false, pickMode: null, pendingMapPick: null, restoreResultsAfterPick: false, restorePlannerAfterPick: null, route: null, routeOptions: [], activeRouteIndex: 0, activeSegmentIndex: null, currentLocation: null, locationDenied: false, locationUnavailable: false, departureMode: "now", departureTime: null, departure: null, unavailableRoutes: [], activeFacilityLayer: null, babycareVisible: false, babycareData: null, publicFacilityData: null };
   let map;
+  let mapLabelLayer;
   let startMarker;
   let endMarker;
   let routeLayer;
@@ -81,8 +85,11 @@
   document.addEventListener("DOMContentLoaded", init);
 
   async function init() {
+    i18n.applyDocument();
+    updateBrandLogo();
     initMap();
     const indexPlaces = await MapableSearchService.loadIndex("data/search-index.json");
+    placeLocalizationIndex = buildPlaceLocalizationIndex(indexPlaces);
     searchService = MapableSearchService.createSearchService(places, indexPlaces);
     routeService = MapableRouteWorkerClient.create(() => MapableRoutingService.create());
     bindEvents();
@@ -104,7 +111,7 @@
       maxNativeZoom: 16,
       attribution: ""
     }).addTo(map);
-    L.tileLayer("https://api.hkmapservice.gov.hk/ags/map/label-tc/WGS84/tile/{z}/{y}/{x}?key=6d31536061a9447da6d876feb2d5b277", {
+    mapLabelLayer = L.tileLayer(mapLabelTileUrl(), {
       maxZoom: 18,
       maxNativeZoom: 16,
       attribution: ""
@@ -125,7 +132,7 @@
           const digitClass = count >= 1000 ? " is-four-digits" : "";
           return L.divIcon({
             html: '<span class="babycare-cluster-count' + digitClass + '" aria-hidden="true">' + count
-              + '</span><span class="sr-only">' + count + " \u500b\u6bcd\u5b30\u8a2d\u65bd</span>",
+              + '</span><span class="sr-only">' + count + " " + escapeHtml(t("facility.babycare")) + "</span>",
             className: "babycare-cluster",
             iconSize: L.point(40, 40)
           });
@@ -146,10 +153,10 @@
           const count = cluster.getChildCount();
           const digitClass = count >= 1000 ? " is-four-digits" : "";
           const kind = publicFacilityRenderedKind || state.activeFacilityLayer || "publicToilet";
-          const label = kind === "aed" ? "AED" : "\u516c\u5171\u5ec1\u6240";
+          const label = t(kind === "aed" ? "facility.aed" : "facility.publicToilet");
           return L.divIcon({
             html: '<span class="public-facility-cluster-count is-' + facilityKindClass(kind) + digitClass + '" aria-hidden="true">' + count
-              + '</span><span class="sr-only">' + count + " \u500b" + label + "</span>",
+              + '</span><span class="sr-only">' + count + " " + escapeHtml(label) + "</span>",
             className: "public-facility-cluster",
             iconSize: L.point(40, 40)
           });
@@ -179,8 +186,16 @@
   function renderZoomControlIcons() {
     const zoomIn = document.querySelector(".leaflet-control-zoom-in");
     const zoomOut = document.querySelector(".leaflet-control-zoom-out");
-    if (zoomIn) zoomIn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
-    if (zoomOut) zoomOut.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>';
+    if (zoomIn) {
+      zoomIn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>';
+      zoomIn.title = t("map.zoomIn");
+      zoomIn.setAttribute("aria-label", t("map.zoomIn"));
+    }
+    if (zoomOut) {
+      zoomOut.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>';
+      zoomOut.title = t("map.zoomOut");
+      zoomOut.setAttribute("aria-label", t("map.zoomOut"));
+    }
     syncFacilityControlGeometry();
   }
 
@@ -217,6 +232,7 @@
     document.getElementById("close-map-info")?.addEventListener("click", closeMapInfoOverlay);
     document.getElementById("map-info-content")?.addEventListener("click", handleMapInfoAction);
     bindSettingsDialog();
+    document.addEventListener("mapable:languagechange", handleLanguageChange);
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && state.pickMode) setPickMode(null);
       if (event.key === "Escape") closeMapInfoOverlay();
@@ -265,7 +281,167 @@
     contrastToggle?.addEventListener("click", () => {
       setContrastMode(state.contrastMode === "highContrast" ? "standard" : "highContrast");
     });
+    dialog.querySelectorAll("[data-language]").forEach((button) => {
+      button.addEventListener("click", () => i18n.setLanguage(button.dataset.language));
+    });
+    document.getElementById("language-selector")?.addEventListener("keydown", moveButtonFocus);
     renderContrastModeControl();
+  }
+
+  function handleLanguageChange(event) {
+    state.language = event.detail?.language || i18n.getLanguage();
+    updateBrandLogo();
+    mapLabelLayer?.setUrl(mapLabelTileUrl());
+    renderZoomControlIcons();
+    closeMapInfoOverlay();
+    setInput("start-input", state.start);
+    setInput("end-input", state.end);
+    refreshDeparturePickerLanguage();
+    renderDepartureControls({ animate: false });
+    updateLocateButton();
+    if (isPlanningRoute || state.resultStatus === "planning") {
+      renderPlanningRoute(t("planning.title"), t("planning.description"));
+    } else if (state.route) {
+      renderRouteOptions();
+      renderRoute(state.route, { fit: false, updateStatus: false });
+      renderResults(state.route);
+      setStatus(`${localizedDataText(state.route.title)}: ${t("mode.walk")} ${formatDistance(state.route.walkDistance ?? state.route.distance)}, ${formatDuration(state.route.minutes)}`);
+    } else if (state.resultStatus === "no-route") {
+      renderNoRoute({
+        unavailableRoutes: state.unavailableRoutes,
+        departure: state.departure,
+        profile: state.profileMeta,
+        profileNotice: state.profileNotice
+      }, { preserveResultsState: true });
+    } else {
+      renderPendingRoute({ preserveResultsState: true });
+    }
+    ["start", "end"].forEach((kind) => {
+      const results = document.getElementById(`${kind}-results`);
+      if (!results?.classList.contains("is-open")) return;
+      const query = document.getElementById(`${kind}-input`)?.value.trim();
+      if (query) showSearchResults(kind);
+      else showEmptySearchMenu(kind);
+    });
+    if (state.activeFacilityLayer === "babycare") {
+      babycareMarkers.clear();
+      babycareLayer?.clearLayers();
+      babycareViewportSignature = "";
+      renderBabycareViewport();
+    } else if (state.activeFacilityLayer) {
+      publicFacilityMarkers.clear();
+      publicFacilityLayer?.clearLayers();
+      publicFacilityViewportSignature = "";
+      renderPublicFacilityViewport();
+    }
+    syncDepartureLayout({ animate: false });
+    scheduleSearchPanelPositioning();
+  }
+
+  function updateBrandLogo() {
+    const logo = document.querySelector(".brand-logo");
+    if (!logo) return;
+    logo.src = state.language === "en" ? "assets/logoEN.png"
+      : state.language === "zh-Hans" ? "assets/logoSC.png"
+        : "assets/logoTC.png";
+  }
+
+  function mapLabelTileUrl() {
+    const labelLanguage = state.language === "en" ? "en" : state.language === "zh-Hans" ? "sc" : "tc";
+    return `https://api.hkmapservice.gov.hk/ags/map/label-${labelLanguage}/WGS84/tile/{z}/{y}/{x}?key=6d31536061a9447da6d876feb2d5b277`;
+  }
+
+  function refreshDeparturePickerLanguage() {
+    if (!departureDatepicker) return;
+    departureDatepicker.update({
+      locale: departurePickerLocale(),
+      buttons: [{
+        content: t("common.confirm"),
+        onClick(datepicker) {
+          const input = document.getElementById("departure-time-trigger");
+          if (input && commitDeparturePickerValue(input)) datepicker.hide();
+        }
+      }]
+    });
+  }
+
+ function localizedPlaceAddress(place) {
+   return i18n.placeAddress(place);
+ }
+
+  function localizedDataText(value) {
+    return i18n.dataText(value);
+  }
+
+  function buildPlaceLocalizationIndex(indexPlaces) {
+    const index = new Map();
+    (indexPlaces || []).forEach((place) => {
+      [place.name, ...(place.aliases || [])].forEach((label) => {
+        const key = String(label || "").trim();
+        if (key && !index.has(key)) index.set(key, place);
+      });
+    });
+    return index;
+  }
+
+  function containsHan(value) {
+    return /[\u3400-\u9fff]/u.test(String(value || ""));
+  }
+
+  function findPlaceLocalization(value) {
+    const source = String(value || "").trim();
+    const direct = [source, source.replace(/\u7ad9$/u, "")].find((key) => placeLocalizationIndex.has(key));
+    if (direct) return placeLocalizationIndex.get(direct);
+    if (state.language !== "en" || !source) return null;
+    return [...placeLocalizationIndex.entries()]
+      .filter(([label]) => containsHan(label) && label.length >= 2 && source.includes(label))
+      .sort((left, right) => right[0].length - left[0].length)[0]?.[1] || null;
+  }
+
+  function englishNameForSource(value) {
+    const source = String(value || "").trim();
+    const candidates = [...placeLocalizationIndex.entries()]
+      .filter(([label]) => containsHan(label) && label.length >= 2 && source.includes(label))
+      .map(([label, place]) => ({ label, english: i18n.placeName(place) }))
+      .filter((item) => item.english && !containsHan(item.english))
+      .sort((left, right) => right.label.length - left.label.length);
+    if (!candidates.length) return "";
+    const unique = candidates
+      .map((item) => item.english)
+      .filter((name, index, names) => index === names.indexOf(name));
+    if (source.endsWith("\u9644\u8fd1\u5730\u9ede")) {
+      return t("place.nearbyNamed", { place: unique.slice(0, 3).join(", ") });
+    }
+    const exit = source.match(/^(.*?)\s+([A-Z]\d*(?:\s*\/\s*[A-Z]\d*)?)\s*\u51fa\u53e3$/u);
+    if (exit) {
+      const base = englishNameForSource(exit[1]);
+      if (base) return base + " " + exit[2] + " Exit";
+    }
+    return unique[0];
+  }
+
+  function localizedPlaceName(place) {
+    const value = i18n.placeName(place);
+    if (state.language !== "en" || !containsHan(value)) return value;
+    return englishNameForSource(place?.name)
+      || (place?.type ? t(`type.${place.type}`) : "")
+      || t("place.unknown");
+  }
+
+  function localizedNameText(value) {
+    const source = String(value || "").trim();
+    const english = state.language === "en" ? englishNameForSource(source) : "";
+    return english || localizedDataText(source);
+  }
+
+  function localizedFacilityName(facility) {
+    if (state.language === "en" && facility?.nameEn) return String(facility.nameEn).trim();
+    return localizedDataText(facility?.name || "");
+  }
+
+  function localizedFacilityValue(facility, field, englishField = "") {
+    if (state.language === "en" && englishField && facility?.[englishField]) return String(facility[englishField]).trim();
+    return localizedDataText(facility?.[field] || "");
   }
 
   function bindDepartureControls() {
@@ -324,14 +500,14 @@
       settingLabel.hidden = false;
       settingLabel.classList.toggle("is-visible", !planned);
       settingLabel.setAttribute("aria-hidden", String(planned));
-      settingLabel.textContent = state.departureMode === "all" ? "不按出發時間篩選" : "即時班次與到站";
+      settingLabel.textContent = state.departureMode === "all" ? t("departure.unfiltered") : t("departure.realtime");
     }
     if (planned) {
       const date = state.departureTime ? new Date(state.departureTime) : nextPlannedDeparture();
       const value = formatDepartureTimeLabel(date);
       trigger.value = value;
       departurePickerLastValidValue = value;
-      trigger.setAttribute("aria-label", "\u8a08\u5283\u51fa\u767c\u6642\u9593\uff1a" + value);
+      trigger.setAttribute("aria-label", t("departure.plannedAria", { value }));
     }
     syncDepartureLayout({ animate, previousRects });
     scheduleMobileLayoutMetrics();
@@ -465,18 +641,7 @@
   }
 
   function departurePickerLocale() {
-    return {
-      days: ["\u661f\u671f\u65e5", "\u661f\u671f\u4e00", "\u661f\u671f\u4e8c", "\u661f\u671f\u4e09", "\u661f\u671f\u56db", "\u661f\u671f\u4e94", "\u661f\u671f\u516d"],
-      daysShort: ["\u9031\u65e5", "\u9031\u4e00", "\u9031\u4e8c", "\u9031\u4e09", "\u9031\u56db", "\u9031\u4e94", "\u9031\u516d"],
-      daysMin: ["\u65e5", "\u4e00", "\u4e8c", "\u4e09", "\u56db", "\u4e94", "\u516d"],
-      months: ["\u4e00\u6708", "\u4e8c\u6708", "\u4e09\u6708", "\u56db\u6708", "\u4e94\u6708", "\u516d\u6708", "\u4e03\u6708", "\u516b\u6708", "\u4e5d\u6708", "\u5341\u6708", "\u5341\u4e00\u6708", "\u5341\u4e8c\u6708"],
-      monthsShort: ["1\u6708", "2\u6708", "3\u6708", "4\u6708", "5\u6708", "6\u6708", "7\u6708", "8\u6708", "9\u6708", "10\u6708", "11\u6708", "12\u6708"],
-      today: "\u4eca\u5929",
-      clear: "\u6e05\u9664",
-      dateFormat: "yyyy-MM-dd",
-      timeFormat: "HH:mm",
-      firstDay: 1
-    };
+    return i18n.datepickerLocale();
   }
 
   function bindDeparturePicker() {
@@ -496,7 +661,7 @@
         minDate: earliestPlannedDeparture(),
         position: "bottom center",
         buttons: [{
-          content: "\u78ba\u5b9a",
+          content: t("common.confirm"),
           onClick(datepicker) {
             if (commitDeparturePickerValue(input)) datepicker.hide();
           }
@@ -828,7 +993,7 @@
     event.preventDefault();
     cancelSearchWork();
     prepareMapForRoutePlanning();
-    renderPlanningRoute("正在查找地點", "正在確認起點和終點，請稍候。");
+    renderPlanningRoute(t("status.findingPlaces"), t("status.findingPlacesDescription"));
     const resolved = await resolveTypedPlaces();
     if (!resolved) return;
     await planRoute();
@@ -841,8 +1006,8 @@
     clearRoute();
     renderEndpointMarkers();
     renderNoRoute();
-    const missing = !startOk && !endOk ? "起點和終點" : !startOk ? "起點" : "終點";
-    setStatus(`請先選定${missing}，或直接在地圖點選位置。`);
+    const missing = !startOk && !endOk ? `${t("place.start")} / ${t("place.end")}` : !startOk ? t("place.start") : t("place.end");
+    setStatus(t("status.chooseMissing", { missing }));
     return false;
   }
 
@@ -909,7 +1074,7 @@
     panel.classList.toggle("is-collapsed", normalized);
     button.classList.toggle("is-expanded", normalized);
     button.setAttribute("aria-expanded", String(!normalized));
-    button.setAttribute("aria-label", normalized ? "展開路線規劃" : "折疊路線規劃");
+    button.setAttribute("aria-label", t(normalized ? "planner.expand" : "planner.collapse"));
     button.title = button.getAttribute("aria-label");
     updatePlannerPanelHandle();
     setTimeout(() => {
@@ -1108,8 +1273,8 @@
     panel.classList.toggle("is-expanded", expanded);
     button.classList.toggle("is-expanded", expanded);
     button.setAttribute("aria-pressed", String(expanded));
-    button.setAttribute("aria-label", expanded ? "還原路線結果高度" : "向上擴展路線結果");
-    button.title = expanded ? "還原路線結果高度" : "向上擴展路線結果";
+    button.setAttribute("aria-label", t(expanded ? "results.restore" : "results.expand"));
+    button.title = t(expanded ? "results.restore" : "results.expand");
     syncPlannerCollapseForResults(expanded);
     updateDesktopResultsHandle();
     setTimeout(() => map.invalidateSize(), 260);
@@ -1386,10 +1551,12 @@
     const destination = {
       id: facility.id,
       name: facility.name,
+      nameEn: facility.nameEn || "",
       type: "poi",
       subtype: "babycare",
       positionSource: "babycare",
       address: facility.address || facility.location || "",
+      addressEn: facility.addressEn || "",
       lat: facility.lat,
       lng: facility.lng
     };
@@ -1407,11 +1574,13 @@
     const name = facilityDisplayName(facility);
     const destination = {
       id: facility.id,
-      name,
+      name: facility.name,
+      nameEn: facility.nameEn || "",
       type: "poi",
       subtype: facility.kind,
       positionSource: "public-facility",
       address: facility.address || facility.locationDetail || "",
+      addressEn: facility.addressEn || "",
       lat: facility.lat,
       lng: facility.lng
     };
@@ -1611,7 +1780,7 @@
       if (match) setPlace(kind, match);
       else {
         setPickMode(kind);
-        setStatus(`找不到「${input.value}」。請在地圖點一下，設為${kind === "start" ? "起點" : "終點"}。`);
+        setStatus(t("status.notFoundPick", { query: input.value, kind: kind === "start" ? t("place.start") : t("place.end") }));
       }
       closeSearchResults(kind);
     });
@@ -1634,16 +1803,16 @@
     results.innerHTML = `
       <button class="search-option search-option-action" type="button" data-use-location="${kind}" role="option">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
-        <strong>使用我的位置</strong>
+        <strong>${escapeHtml(t("search.useLocation"))}</strong>
       </button>
       <button class="search-option search-option-action" type="button" data-pick-map="${kind}" role="option">
         <svg class="map-pick-target-icon" viewBox="0 0 24 24" aria-hidden="true">${mapPickTargetPaths()}</svg>
-        <strong>地圖點選位置</strong>
+        <strong>${escapeHtml(t("search.pickMap"))}</strong>
       </button>
     `;
     if (state.locationDenied) {
       const label = results.querySelector("[data-use-location] strong");
-      if (label) label.textContent = "\u9700\u8981\u5141\u8a31\u5b9a\u4f4d\u670d\u52d9\u624d\u80fd\u8b80\u53d6\u76ee\u524d\u4f4d\u7f6e";
+      if (label) label.textContent = t("search.locationPermission");
     }
     bindSearchActions(kind, results);
     openSearchResults(kind);
@@ -1714,14 +1883,14 @@
     const searching = Boolean(options.searching);
     const items = matches.map((place) => `
       <button class="search-option" type="button" data-id="${escapeHtml(place.id)}" role="option">
-        <strong>${escapeHtml(place.name)}</strong>
+        <strong>${escapeHtml(localizedPlaceName(place))}</strong>
         <span>${escapeHtml(searchResultMeta(place))}</span>
       </button>
     `).join("");
     const searchingCard = searching ? `
       <div class="search-option search-status-card" role="status" aria-live="polite">
-        <strong>正在搜尋香港地點</strong>
-        <span>這一操作可能消耗較長時間，正在同步查詢更多地點，請稍候。</span>
+        <strong>${escapeHtml(t("search.searchingTitle"))}</strong>
+        <span>${escapeHtml(t("search.searchingDescription"))}</span>
       </div>
     ` : "";
 
@@ -1733,8 +1902,8 @@
 
     results.innerHTML = `
       <button class="search-option search-option-fallback" type="button" data-pick-map="${kind}" role="option">
-        <strong>找不到「${escapeHtml(query)}」</strong>
-        <span>可直接在地圖點一下，設為${kind === "start" ? "起點" : "終點"}</span>
+        <strong>${escapeHtml(t("search.notFound", { query }))}</strong>
+        <span>${escapeHtml(t("search.pickAs", { kind: kind === "start" ? t("place.start") : t("place.end") }))}</span>
       </button>
     `;
     bindSearchActions(kind, results);
@@ -1854,7 +2023,7 @@
 
   function searchResultMeta(place) {
     const type = typeLabel(place.type);
-    return [...new Set([type, place.address || "香港"].map((value) => String(value).trim()).filter(Boolean))].join(" · ");
+    return [...new Set([type, localizedPlaceAddress(place) || t("common.hongKong")].map((value) => String(value).trim()).filter(Boolean))].join(" · ");
   }
 
   async function searchPlaces(query) {
@@ -1895,7 +2064,7 @@
       state.babycareVisible = false;
     }
     applyProfileUi(selected.id);
-    setStatus(`已選擇${selected.label}出行需要，正在重新比較路線。`);
+    setStatus(t("status.profileSelected", { profile: t(`profiles.${selected.id}`) }));
     planRoute();
   }
 
@@ -1924,8 +2093,8 @@
     renderColorModeControls();
     setVisualPickerOpen(false);
     if (state.route) renderRoute(state.route, { fit: false, updateStatus: false });
-    const label = document.querySelector('[data-color-mode="' + mode + '"] span')?.textContent || "色弱";
-    announceRoute("已切換至" + label + "顯示。路線排序不變。");
+    const label = document.querySelector('[data-color-mode="' + mode + '"] span')?.textContent || t("profiles.colorVision");
+    announceRoute(t("status.colorMode", { mode: label }));
   }
 
   function renderColorModeControls() {
@@ -1942,7 +2111,7 @@
     renderContrastModeControl();
     requestAnimationFrame(syncFacilityControlGeometry);
     if (state.route) renderRoute(state.route, { fit: false, updateStatus: false });
-    announceRoute(state.contrastMode === "highContrast" ? "已開啟高對比顯示。" : "已關閉高對比顯示。");
+    announceRoute(t(state.contrastMode === "highContrast" ? "status.contrastOn" : "status.contrastOff"));
   }
 
   function renderContrastModeControl() {
@@ -2035,7 +2204,7 @@
     if (shouldPlan) planRoute();
   }
   function setInput(id, place) {
-    document.getElementById(id).value = place ? place.name : "";
+    document.getElementById(id).value = place ? localizedPlaceName(place) : "";
     syncSearchClearButton(id.startsWith("start-") ? "start" : "end");
   }
 
@@ -2079,7 +2248,7 @@
     clearRoute();
     renderEndpointMarkers();
     renderPendingRoute();
-    setStatus("請重新選擇起點，或再次使用我的位置。");
+    setStatus(t("status.reselectStart"));
     return true;
   }
 
@@ -2151,12 +2320,12 @@
     confirmButton.hidden = !state.pickMode;
     confirmButton.disabled = true;
     confirmButton.querySelector("span").textContent = state.pickMode === "start"
-      ? "\u78ba\u8a8d\u8d77\u9ede"
+      ? t("mapPick.confirmStart")
       : state.pickMode === "end"
-        ? "\u78ba\u8a8d\u7d42\u9ede"
-        : "\u78ba\u8a8d\u9078\u53d6";
-    confirmButton.setAttribute("aria-label", state.pickMode ? `確認所選${state.pickMode === "start" ? "起點" : "終點"}` : "確認選取");
-    if (state.pickMode) setStatus(`請在地圖點選${state.pickMode === "start" ? "起點" : "終點"}，選好後確認，或按「取消點選」返回。`);
+        ? t("mapPick.confirmEnd")
+        : t("mapPick.confirm");
+    confirmButton.setAttribute("aria-label", state.pickMode === "start" ? t("mapPick.confirmStart") : state.pickMode === "end" ? t("mapPick.confirmEnd") : t("mapPick.confirm"));
+    if (state.pickMode) setStatus(t("mapPick.prompt", { kind: state.pickMode === "start" ? t("place.start") : t("place.end") }));
   }
 
   function onMapClick(event) {
@@ -2164,27 +2333,35 @@
       closeMapInfoOverlay();
       return;
     }
-    const kind = state.pickMode;
-    const nearby = searchService?.nearbyPlace(event.latlng.lat, event.latlng.lng);
-    const place = {
+   const kind = state.pickMode;
+   const nearby = searchService?.nearbyPlace(event.latlng.lat, event.latlng.lng);
+   const nearbyEnglishParts = [nearby?.areaPlace, nearby?.landmarkPlace]
+      .map((place) => englishNameForSource(place?.name))
+      .filter(Boolean)
+      .filter((name, index, names) => index === 0 || !names.slice(0, index).some((previous) => previous === name || previous.includes(name) || name.includes(previous)));
+    const nearbyEnglishName = nearbyEnglishParts.length
+      ? t("place.nearbyNamed", { place: nearbyEnglishParts.join(", ") })
+      : t("place.selectedNearby");
+   const place = {
       id: `custom-${kind}-${event.latlng.lat.toFixed(6)}-${event.latlng.lng.toFixed(6)}`,
-      name: nearby?.name || "所選位置附近地點",
+      name: nearby?.name || "\u6240\u9078\u4f4d\u7f6e\u9644\u8fd1\u5730\u9ede",
+      nameEn: nearbyEnglishName,
       type: "custom",
       positionSource: "map-pick",
       address: `${event.latlng.lat.toFixed(5)}, ${event.latlng.lng.toFixed(5)}`,
       lat: event.latlng.lat,
       lng: event.latlng.lng,
-      aliases: []
+      aliases: nearbyEnglishParts
     };
     state.pendingMapPick = { kind, place };
     setInput(`${kind}-input`, place);
     if (mapPickPreviewMarker) mapPickPreviewMarker.remove();
     mapPickPreviewMarker = L.marker([place.lat, place.lng], {
-      icon: markerIcon(kind === "start" ? "起" : "終", kind),
+      icon: markerIcon(endpointMarkerLabel(kind), kind),
       zIndexOffset: 1200
     }).addTo(map);
     document.getElementById("confirm-map-pick").disabled = false;
-    setStatus(`已選「${place.name}」。可繼續點選另一位置、確認選取，或取消點選。`);
+    setStatus(t("mapPick.selectedStatus", { place: localizedPlaceName(place) }));
   }
 
   function confirmMapPick() {
@@ -2234,10 +2411,10 @@
       state.locationUnavailable = true;
       updateLocateButton();
       setLocationOverlay(false);
-      setStatus("此瀏覽器未提供定位。可改用地圖點選。");
+      setStatus(t("location.unsupported"));
       return;
     }
-    if (!initial && !background) setStatus("正在讀取目前位置。");
+    if (!initial && !background) setStatus(t("location.reading"));
     navigator.geolocation.getCurrentPosition(
       (position) => {
         locationRequestInFlight = false;
@@ -2256,7 +2433,7 @@
         else if (setStartOnSuccess && !state.start) setPlace("start", place, { autoLocation: true });
         if (setMapView) map.setView([place.lat, place.lng], 16);
         setLocationOverlay(false);
-        if (!initial && !background && !setPlaceKind) setStatus("已定位到目前位置。");
+        if (!initial && !background && !setPlaceKind) setStatus(t("location.located"));
       },
       (error) => {
         locationRequestInFlight = false;
@@ -2268,9 +2445,7 @@
         else startLocationRefresh();
         setLocationOverlay(false);
         if (!background) {
-          setStatus(permissionDenied
-            ? "請允許定位服務，或使用地圖點選位置。"
-            : "暫未取得目前位置，將在背景重試；你也可按「重新定位」。");
+          setStatus(t(permissionDenied ? "location.denied" : "location.unavailable"));
         }
       },
       { enableHighAccuracy: background, timeout: initial ? 15000 : 10000, maximumAge: background ? 0 : 60000 }
@@ -2294,11 +2469,11 @@
   function currentLocationPlace() {
     return {
       id: "current-location",
-      name: "我的位置",
+      name: t("place.currentLocation"),
       type: "custom",
       positionSource: "geolocation",
       accuracy: state.currentLocation?.accuracy,
-      address: state.currentLocation?.accuracy ? `GPS 定位，約 ${Math.round(state.currentLocation.accuracy)} 米範圍` : "GPS 定位",
+      address: state.currentLocation?.accuracy ? t("location.gpsAccuracy", { meters: Math.round(state.currentLocation.accuracy) }) : t("location.gps"),
       lat: state.currentLocation.lat,
       lng: state.currentLocation.lng,
       aliases: ["目前位置", "我的位置", "Your location"]
@@ -2313,9 +2488,9 @@
     currentLocationMarker = L.marker([place.lat, place.lng], {
       icon: currentLocationIcon(),
       zIndexOffset: 10000
-    }).bindPopup("我的位置").addTo(map);
+    }).bindPopup(t("place.currentLocation")).addTo(map);
     currentLocationMarker.unbindPopup();
-    bindMapInfoMarker(currentLocationMarker, place.name, { kind: "current-location" });
+    bindMapInfoMarker(currentLocationMarker, localizedPlaceName(place), { kind: "current-location" });
     if (Number.isFinite(state.currentLocation.accuracy)) {
       currentAccuracyCircle = L.circle([place.lat, place.lng], {
         radius: Math.min(Math.max(state.currentLocation.accuracy, 20), 500),
@@ -2346,10 +2521,10 @@
     const button = document.getElementById("locate-button");
     if (!button) return;
     const prompt = state.locationDenied
-      ? "允許定位服務"
+      ? t("locate.allow")
       : state.locationUnavailable && !state.currentLocation
-        ? "重新定位"
-        : "定位到目前位置";
+        ? t("locate.retry")
+        : t("locate.title");
     button.classList.toggle("needs-permission", state.locationDenied || (state.locationUnavailable && !state.currentLocation));
     button.setAttribute("aria-label", prompt);
     button.title = prompt;
@@ -2370,21 +2545,21 @@
       isPlanningRoute = false;
       return;
     }
-    setStatus("正在規劃步行、港鐵和巴士可行路線...");
-    renderPlanningRoute("正在規劃路線", "正在整理步行、港鐵、輕鐵和巴士方案，通常需要幾秒鐘。");
-    setOptionalText("recommendation-text", "正在規劃多條路線，這一操作可能消耗較長時間。");
+    setStatus(t("planning.status"));
+    renderPlanningRoute(t("planning.title"), t("planning.description"));
+    setOptionalText("recommendation-text", t("planning.longDescription"));
     if (isMobileResultsLayout() && !options.preserveResultsState) setMobileResultsState("expanded");
     const departureDate = departureForPlan();
     const slowTimer = setTimeout(() => {
       if (token !== routePlanningToken) return;
-      setStatus("仍在規劃中：正在等待即時到站或道路線形資料...");
-      renderPlanningRoute("仍在規劃中", "正在等待即時到站、票價或道路線形資料；如果網絡較慢，可能需要多等一會。跳轉或重新選點會自動取消本次規劃。");
+      setStatus(t("planning.stillStatus"));
+      renderPlanningRoute(t("planning.stillTitle"), t("planning.stillDescription"));
     }, 8000);
     try {
       const result = await withTimeout(routeService.plan(state.start, state.end, state.profile, {
         departureMode: state.departureMode,
         departureTime: departureDate.toISOString()
-      }), 30000, "路線規劃逾時，請重試或先改用較近的接駁點。");
+      }), 30000, t("planning.timeout"));
       if (token !== routePlanningToken) return;
       state.routeOptions = result.options || [];
       state.unavailableRoutes = result.unavailableRoutes || [];
@@ -2406,7 +2581,7 @@
       clearRoute();
       renderEndpointMarkers();
       renderNoRoute(null, options);
-      setStatus(`路線規劃失敗：${error.message}`);
+      setStatus(t("planning.failed", { message: error.message }));
     } finally {
       clearTimeout(slowTimer);
       if (token === routePlanningToken) isPlanningRoute = false;
@@ -2436,31 +2611,32 @@
     startMarker = null;
     endMarker = null;
     if (state.start) {
-      startMarker = L.marker([state.start.lat, state.start.lng], { icon: markerIcon("start", "start") }).addTo(map);
-      bindMapInfoMarker(startMarker, state.start.name, { kind: "start" });
+      startMarker = L.marker([state.start.lat, state.start.lng], { icon: markerIcon(endpointMarkerLabel("start"), "start") }).addTo(map);
+      bindMapInfoMarker(startMarker, localizedPlaceName(state.start), { kind: "start" });
     }
     if (state.end) {
-      endMarker = L.marker([state.end.lat, state.end.lng], { icon: markerIcon("end", "end") }).addTo(map);
-      bindMapInfoMarker(endMarker, state.end.name, { kind: "end" });
+      endMarker = L.marker([state.end.lat, state.end.lng], { icon: markerIcon(endpointMarkerLabel("end"), "end") }).addTo(map);
+      bindMapInfoMarker(endMarker, localizedPlaceName(state.end), { kind: "end" });
     }
   }
 
   function renderPlanningRoute(title, message) {
+    state.resultStatus = "planning";
     state.routeOptions = [];
     state.unavailableRoutes = [];
     state.departure = null;
     state.activeRouteIndex = 0;
     const routeOptions = document.getElementById("route-options");
     if (routeOptions) {
-      routeOptions.innerHTML = `<button class="route-option-button is-loading" type="button" disabled><svg class="route-option-spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 8 8"/></svg><span>${escapeHtml(title)}<small>請稍候</small></span></button>`;
+      routeOptions.innerHTML = `<button class="route-option-button is-loading" type="button" disabled><svg class="route-option-spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 8 8"/></svg><span>${escapeHtml(title)}<small>${escapeHtml(t("common.pleaseWait"))}</small></span></button>`;
     }
     clearSegmentUi();
     hideBabycareRouteSummary();
     document.getElementById("results-title").textContent = title;
     document.getElementById("summary-distance").textContent = "--";
-    document.getElementById("summary-time").textContent = "計算中";
-    document.getElementById("summary-fare").textContent = "查詢中";
-    renderRiskBadge("規劃中", "is-neutral");
+    document.getElementById("summary-time").textContent = t("planning.calculating");
+    document.getElementById("summary-fare").textContent = t("planning.querying");
+    renderRiskBadge(t("planning.badge"), "is-neutral");
     const flow = document.getElementById("journey-flow");
     if (flow) flow.innerHTML = `<div class="journey-empty">${escapeHtml(message)}</div>`;
     renderRouteDataStatus(null);
@@ -2468,8 +2644,9 @@
     renderServiceNotice();
   }
 
-  function renderPendingRoute() {
-    setResultsExpanded(false);
+  function renderPendingRoute(options = {}) {
+    state.resultStatus = "pending";
+    if (!options.preserveResultsState) setResultsExpanded(false);
     state.routeOptions = [];
     state.unavailableRoutes = [];
     state.departure = null;
@@ -2480,15 +2657,15 @@
     clearSegmentUi();
     hideBabycareRouteSummary();
     renderJourneyFlow(null);
-    document.getElementById("results-title").textContent = "未規劃路線";
+    document.getElementById("results-title").textContent = t("results.unplanned");
     document.getElementById("summary-distance").textContent = "--";
     document.getElementById("summary-time").textContent = "--";
     document.getElementById("summary-fare").textContent = "--";
-    renderRiskBadge("待選擇", "is-neutral");
+    renderRiskBadge(t("results.pending"), "is-neutral");
     renderRouteDataStatus(null);
     renderProfileSummary(null);
     renderServiceNotice();
-    setStatus(state.start ? "已設定起點。請選擇終點。" : "選擇起點和終點後，會顯示建議路線。");
+    setStatus(state.start ? t("status.chooseMissing", { missing: t("place.end") }) : t("status.initial"));
   }
 
   function recommendRoute(start, end, profile) {
@@ -2600,14 +2777,14 @@
       }).addTo(routeLayer);
       bindMapInfoMarker(exitMarker, exitInfo, { kind: "mtr-exit" });
     }
-    startMarker = L.marker([state.start.lat, state.start.lng], { icon: markerIcon("起", "start") }).bindPopup(state.start.name).addTo(map);
-    endMarker = L.marker([state.end.lat, state.end.lng], { icon: markerIcon("終", "end") }).bindPopup(state.end.name).addTo(map);
+    startMarker = L.marker([state.start.lat, state.start.lng], { icon: markerIcon(endpointMarkerLabel("start"), "start") }).bindPopup(localizedPlaceName(state.start)).addTo(map);
+    endMarker = L.marker([state.end.lat, state.end.lng], { icon: markerIcon(endpointMarkerLabel("end"), "end") }).bindPopup(localizedPlaceName(state.end)).addTo(map);
     startMarker.unbindPopup();
     endMarker.unbindPopup();
-    bindMapInfoMarker(startMarker, state.start.name, { kind: "start" });
-    bindMapInfoMarker(endMarker, state.end.name, { kind: "end" });
+    bindMapInfoMarker(startMarker, localizedPlaceName(state.start), { kind: "start" });
+    bindMapInfoMarker(endMarker, localizedPlaceName(state.end), { kind: "end" });
     if (fit) fitRoute();
-    if (updateStatus) setStatus(`${plan.title}：步行 ${formatDistance(plan.walkDistance ?? plan.distance)}，約 ${formatDuration(plan.minutes)}。`);
+    if (updateStatus) setStatus(`${localizedDataText(plan.title)}：${t("mode.walk")} ${formatDistance(plan.walkDistance ?? plan.distance)}，${formatDuration(plan.minutes)}。`);
   }
 
   function routeDashArray(mode) {
@@ -2625,17 +2802,17 @@
 
   function routeMapLabel(segment) {
     if (segment.mode === "walk") return "";
-    const value = String(segment.routeNo || segment.lineName || "").trim();
-    return value ? value.slice(0, 12) : routeModeLabel(segment.mode);
+   const value = String(segment.routeNo || segment.lineName || "").trim();
+    return value ? localizedDataText(value).slice(0, 12) : routeModeLabel(segment.mode);
   }
 
   function routeModeLabel(mode) {
     const modeClass = routeModeClass(mode);
-    if (modeClass === "walk") return "步行";
-    if (modeClass === "bus") return "巴士";
-    if (modeClass === "rail") return "港鐵";
-    if (modeClass === "light-rail") return "輕鐵";
-    return "接駁";
+    if (modeClass === "walk") return t("mode.walk");
+    if (modeClass === "bus") return t("mode.bus");
+    if (modeClass === "rail") return t("mode.rail");
+    if (modeClass === "light-rail") return t("mode.lightRail");
+    return t("mode.transfer");
   }
 
   function routeModeIcon(mode, className = "route-mode-icon") {
@@ -2884,7 +3061,7 @@
   }
 
   function facilityDisplayName(facility) {
-    const name = String(facility?.name || "").trim();
+    const name = localizedFacilityName(facility);
     if (facility?.kind !== "aed" || /AED|\u9664\u986b\u5668/i.test(name)) return name;
     return name + " AED";
   }
@@ -2892,48 +3069,48 @@
   function publicFacilityPopup(facility) {
     const isAed = facility.kind === "aed";
     const name = facilityDisplayName(facility);
-    const typeLabel = isAed ? "AED" : publicToiletTypeLabel(facility.subtype, facility.toiletType);
+    const typeLabel = isAed ? t("facility.aed") : publicToiletTypeLabel(facility.subtype, facility.toiletType);
     const fields = isAed ? [
-      facility.address ? ["\u5730\u5740", facility.address] : null,
-      ["\u670d\u52d9\u6642\u9593", facility.openingHours || "\u672a\u6709\u8cc7\u6599"],
-      facility.level ? ["\u6a13\u5c64\u985e\u5225", facility.level] : null,
-      facility.brand || facility.model ? ["\u8a2d\u5099", [facility.brand, facility.model].filter(Boolean).join(" ")] : null,
-      ["\u8cc7\u6599\u4f86\u6e90", facility.sourceName],
-      ["\u8cc7\u6599\u65e5\u671f", facility.sourceUpdatedAt || facility.fetchedAt]
+      facility.address ? [t("facility.address"), localizedFacilityValue(facility, "address", "addressEn")] : null,
+      [t("facility.serviceHours"), localizedFacilityValue(facility, "openingHours") || t("facility.noData")],
+      facility.level ? [t("facility.level"), localizedDataText(facility.level)] : null,
+      facility.brand || facility.model ? [t("facility.equipment"), [facility.brand, facility.model].filter(Boolean).join(" ")] : null,
+      [t("facility.source"), localizedDataText(facility.sourceName)],
+      [t("facility.dataDate"), facility.sourceUpdatedAt || facility.fetchedAt]
     ] : [
-      facility.address ? ["\u5730\u5740", facility.address] : null,
-      facility.level ? ["\u4f4d\u7f6e", facility.level] : null,
-      facility.countryPark ? ["\u90ca\u91ce\u516c\u5712", facility.countryPark] : null,
-      ["\u958b\u653e\u6642\u9593", facility.openingHours || "\u672a\u6709\u8cc7\u6599"],
-      ["\u7121\u969c\u7919\u5ec1\u6240", triStateLabel(facility.accessibleToilet)],
-      facility.universalToilet === "yes" ? ["\u901a\u7528\u5ec1\u6240", "\u6709"] : null,
-      facility.accessibilityRemark ? ["\u7121\u969c\u7919\u5099\u8a3b", facility.accessibilityRemark] : null,
-      ["\u8cc7\u6599\u4f86\u6e90", facility.sourceName],
-      ["\u8cc7\u6599\u65e5\u671f", facility.sourceUpdatedAt || facility.fetchedAt]
+      facility.address ? [t("facility.address"), localizedFacilityValue(facility, "address", "addressEn")] : null,
+      facility.level ? [t("facility.location"), localizedDataText(facility.level)] : null,
+      facility.countryPark ? [t("facility.countryPark"), localizedDataText(facility.countryPark)] : null,
+      [t("facility.openingHours"), localizedFacilityValue(facility, "openingHours") || t("facility.noData")],
+      [t("facility.accessibleToilet"), triStateLabel(facility.accessibleToilet)],
+      facility.universalToilet === "yes" ? [t("facility.universalToilet"), t("facility.yes")] : null,
+      facility.accessibilityRemark ? [t("facility.accessibilityRemark"), localizedDataText(facility.accessibilityRemark)] : null,
+      [t("facility.source"), localizedDataText(facility.sourceName)],
+      [t("facility.dataDate"), facility.sourceUpdatedAt || facility.fetchedAt]
     ];
     const details = fields.filter(Boolean).map(([label, value]) => '<div><dt>' + escapeHtml(label)
       + '</dt><dd>' + escapeHtml(value) + "</dd></div>").join("");
     const sourceLink = facility.sourceUrl
-      ? '<a class="babycare-popup-link" href="' + escapeHtml(facility.sourceUrl) + '" target="_blank" rel="noopener">\u67e5\u770b\u4f86\u6e90</a>'
+      ? '<a class="babycare-popup-link" href="' + escapeHtml(facility.sourceUrl) + '" target="_blank" rel="noopener">' + escapeHtml(t("facility.viewSource")) + "</a>"
       : "";
     const routeButton = '<button class="babycare-popup-route facility-popup-route" type="button" data-public-facility-route-target="'
-      + escapeHtml(facility.id) + '" aria-label="' + escapeHtml("\u898f\u5283\u524d\u5f80" + name)
+      + escapeHtml(facility.id) + '" aria-label="' + escapeHtml(t("facility.planTo", { place: name }))
       + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/>'
-      + '<circle cx="12" cy="9" r="2.4"/></svg><span>\u898f\u5283\u5230\u9019\u88e1</span></button>';
+      + '<circle cx="12" cy="9" r="2.4"/></svg><span>' + escapeHtml(t("facility.planHere")) + "</span></button>";
     const locationDetail = isAed
-      ? '<p class="facility-location-detail"><strong>\u5b89\u88dd\u4f4d\u7f6e</strong><span>'
-        + escapeHtml(facility.locationDetail || "\u672a\u6709\u8cc7\u6599") + "</span></p>"
+      ? '<p class="facility-location-detail"><strong>' + escapeHtml(t("facility.installationLocation")) + "</strong><span>"
+        + escapeHtml(localizedFacilityValue(facility, "locationDetail") || t("facility.noData")) + "</span></p>"
       : "";
     const statusNote = !isAed && facility.temporarilyClosed === "yes"
-      ? '<p class="facility-status-note">\u8cc7\u6599\u6a19\u793a\u6b64\u8a2d\u65bd\u66ab\u505c\u670d\u52d9\uff0c\u8acb\u5148\u67e5\u770b\u4f86\u6e90\u5099\u8a3b\u3002</p>'
+      ? '<p class="facility-status-note">' + escapeHtml(t("facility.closedNote")) + "</p>"
       : "";
     const sourceRemark = !isAed && facility.remark
-      ? '<p class="facility-source-remark">' + escapeHtml(facility.remark) + "</p>"
+      ? '<p class="facility-source-remark">' + escapeHtml(localizedDataText(facility.remark)) + "</p>"
       : "";
     const emergencyNote = isAed
-      ? '<p class="facility-emergency-note">' + escapeHtml(state.publicFacilityData?.meta?.aedEmergencyNote || "\u7dca\u6025\u60c5\u6cc1\u8acb\u5148\u81f4\u96fb 999\u3002") + "</p>"
+      ? '<p class="facility-emergency-note">' + escapeHtml(state.language === "en" ? t("facility.emergencyNote") : localizedDataText(state.publicFacilityData?.meta?.aedEmergencyNote || t("facility.emergencyNote"))) + "</p>"
       : "";
-    const coverageNote = '<p class="facility-coverage-note">' + escapeHtml(state.publicFacilityData?.meta?.coverageNote || "") + "</p>";
+    const coverageNote = '<p class="facility-coverage-note">' + escapeHtml(localizedDataText(state.publicFacilityData?.meta?.coverageNote || "")) + "</p>";
     return '<article class="babycare-popup-card facility-popup-card is-' + facilityKindClass(facility.kind)
       + '"><span class="babycare-source-tag">' + escapeHtml(typeLabel) + " \u00b7 " + escapeHtml(facility.sourceName)
       + "</span><h3>" + escapeHtml(name) + "</h3>" + emergencyNote + locationDetail + statusNote + sourceRemark
@@ -2943,16 +3120,16 @@
 
   function publicToiletTypeLabel(subtype, fallback) {
     return {
-      public_toilet: "\u516c\u5ec1",
-      aqua_privy: "\u65f1\u5ec1",
-      portable_toilet: "\u9577\u671f\u6d41\u52d5\u5ec1\u6240",
-      country_park_toilet: "\u90ca\u91ce\u516c\u5712\u5ec1\u6240",
-      mtr_accessible_toilet: "\u6e2f\u9435\u7121\u969c\u7919\u6d17\u624b\u9593"
-    }[subtype] || fallback || "\u516c\u5171\u5ec1\u6240";
+      public_toilet: t("facility.publicLavatory"),
+      aqua_privy: t("facility.aquaPrivy"),
+      portable_toilet: t("facility.portableToilet"),
+      country_park_toilet: t("facility.countryParkToilet"),
+      mtr_accessible_toilet: t("facility.mtrAccessibleToilet")
+    }[subtype] || localizedDataText(fallback) || t("facility.publicToilet");
   }
 
   function triStateLabel(value) {
-    return { yes: "\u6709", no: "\u6c92\u6709", unknown: "\u672a\u6709\u8cc7\u6599" }[value] || "\u672a\u6709\u8cc7\u6599";
+    return { yes: t("facility.yes"), no: t("facility.no"), unknown: t("facility.noData") }[value] || t("facility.noData");
   }
 
   function scheduleBabycareViewportRender(event) {
@@ -3004,7 +3181,7 @@
     for (const facility of visible) {
       if (babycareMarkers.has(facility.id)) continue;
       const marker = L.marker([facility.lat, facility.lng], {
-        icon: babycareMarkerIcon(facility), title: facility.name, alt: facility.name,
+        icon: babycareMarkerIcon(facility), title: localizedFacilityName(facility), alt: localizedFacilityName(facility),
         keyboard: true, riseOnHover: true, pane: "babycarePane"
       });
       bindMapInfoMarker(marker, babycarePopup(facility), {
@@ -3036,36 +3213,37 @@
 
   function babycarePopup(facility) {
     const kind = facility.facilityKind === "breastfeeding_friendly"
-      ? "\u6bcd\u4e73\u9935\u54fa\u53cb\u5584\u5834\u6240"
-      : "\u80b2\u5b30\u6216\u54fa\u4e73\u8a2d\u65bd";
-    const roomCount = facility.roomCount > 1 ? "<p><strong>" + facility.roomCount + "</strong> \u9593\u5df2\u6536\u9304\u8a2d\u65bd</p>" : "";
+      ? t("facility.breastfeedingFriendly")
+      : t("facility.nursingRoom");
+    const name = localizedFacilityName(facility);
+    const roomCount = facility.roomCount > 1 ? "<p>" + escapeHtml(t("facility.roomCount", { count: facility.roomCount })) + "</p>" : "";
     const fields = [
-      facility.address ? ["\u5730\u5740", facility.address] : null,
-      facility.location ? ["\u4f4d\u7f6e", facility.location] : null,
-      facility.openingHours ? ["\u958b\u653e\u6642\u9593", facility.openingHours] : null,
-      ["\u8cc7\u6599\u4f86\u6e90", facility.sourceLabel],
-      ["\u4f4d\u7f6e\u7cbe\u5ea6", babycarePrecisionLabel(facility.coordinatePrecision)],
-      ["\u8cc7\u6599\u65e5\u671f", facility.sourceDataDate || facility.checkedAt]
+      facility.address ? [t("facility.address"), localizedFacilityValue(facility, "address", "addressEn")] : null,
+      facility.location ? [t("facility.location"), localizedDataText(facility.location)] : null,
+      facility.openingHours ? [t("facility.openingHours"), localizedDataText(facility.openingHours)] : null,
+      [t("facility.source"), localizedDataText(facility.sourceLabel)],
+      [t("facility.coordinatePrecision"), babycarePrecisionLabel(facility.coordinatePrecision)],
+      [t("facility.dataDate"), facility.sourceDataDate || facility.checkedAt]
     ].filter(Boolean);
     const details = fields.map(([label, value]) => '<div><dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(value) + "</dd></div>").join("");
     const link = facility.detailUrl
-      ? '<a class="babycare-popup-link" href="' + escapeHtml(facility.detailUrl) + '" target="_blank" rel="noopener">\u67e5\u770b\u4f86\u6e90</a>'
+      ? '<a class="babycare-popup-link" href="' + escapeHtml(facility.detailUrl) + '" target="_blank" rel="noopener">' + escapeHtml(t("facility.viewSource")) + "</a>"
       : "";
     const routeButton = '<button class="babycare-popup-route" type="button" data-babycare-route-target="' + escapeHtml(facility.id)
-      + '" aria-label="' + escapeHtml("\u898f\u5283\u524d\u5f80" + facility.name) + '"><svg viewBox="0 0 24 24" aria-hidden="true">'
-      + '<path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg><span>\u898f\u5283\u5230\u9019\u88e1</span></button>';
+      + '" aria-label="' + escapeHtml(t("facility.planTo", { place: name })) + '"><svg viewBox="0 0 24 24" aria-hidden="true">'
+      + '<path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg><span>' + escapeHtml(t("facility.planHere")) + "</span></button>";
     return '<article class="babycare-popup-card"><span class="babycare-source-tag">' + escapeHtml(kind) + " \u00b7 " + escapeHtml(facility.sourceLabel)
-      + "</span><h3>" + escapeHtml(facility.name) + "</h3>" + roomCount + "<dl>" + details + '</dl><div class="babycare-popup-actions">'
+      + "</span><h3>" + escapeHtml(name) + "</h3>" + roomCount + "<dl>" + details + '</dl><div class="babycare-popup-actions">'
       + routeButton + link + "</div></article>";
   }
 
   function babycarePrecisionLabel(precision) {
     return {
-      venue: "\u5834\u6240\u4f4d\u7f6e",
-      address: "\u5730\u5740\u4f4d\u7f6e",
-      station: "\u8eca\u7ad9\u4f4d\u7f6e",
-      terminal_group: "\u5ba2\u904b\u5340\u4f4d\u7f6e"
-    }[precision] || "\u4f4d\u7f6e\u5f85\u6838\u5be6";
+      venue: t("facility.precisionVenue"),
+      address: t("facility.precisionAddress"),
+      station: t("facility.precisionStation"),
+      terminal_group: t("facility.precisionTerminal")
+    }[precision] || t("facility.precisionUnknown");
   }
 
   function focusBabycareFacility(id) {
@@ -3111,6 +3289,7 @@
     state.activeRouteIndex = index;
     state.activeSegmentIndex = null;
     state.route = plan;
+    state.resultStatus = "ready";
     renderRouteOptions();
     renderRoute(plan);
     renderResults(plan);
@@ -3125,13 +3304,13 @@
   function renderRouteOptions() {
     const container = document.getElementById("route-options");
     container.innerHTML = state.routeOptions.map((option, index) => {
-      const badges = option.badges?.slice(0, 2).join(" / ") || option.summaryMode || "路線";
+      const badges = (option.badges?.slice(0, 2) || []).map(localizedDataText).join(" / ") || localizedDataText(option.summaryMode) || t("mode.route");
       const variantClass = option.walkVariant ? "is-walk-" + option.walkVariant : "";
       const active = index === state.activeRouteIndex;
-      const label = option.optionLabel || "路線" + (index + 1);
+      const label = localizedDataText(option.optionLabel) || t("results.routeNumber", { count: index + 1 });
       const check = '<svg class="route-option-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 4 4 8-9"/></svg>';
       return '<button class="route-option-button ' + variantClass + (active ? ' is-active' : '') + '" type="button" data-route-index="' + index
-        + '" aria-pressed="' + active + '" aria-label="' + escapeHtml(label + '，' + badges + (active ? '，已選擇' : '')) + '">'
+        + '" aria-pressed="' + active + '" aria-label="' + escapeHtml([label, badges, active ? t("results.selected") : ""].filter(Boolean).join(", ")) + '">'
         + check + '<span>' + escapeHtml(label) + '<small>' + escapeHtml(badges) + '</small></span></button>';
     }).join("");
     container.querySelectorAll("[data-route-index]").forEach((button) => {
@@ -3142,9 +3321,15 @@
   function announceSelectedRoute(plan) {
     const profile = MapableProfileService.resolve(state.profile);
     const routeCount = state.routeOptions.length;
-    const fare = plan.fareLabel || "車費待查";
-    announceRoute(profile.label + "，共找到 " + routeCount + " 條路線。已選擇" + plan.title
-      + "，預計 " + formatDuration(plan.minutes) + "，步行 " + formatDistance(plan.walkDistance ?? plan.distance) + "，" + fare + "。");
+    const fare = localizedDataText(plan.fareLabel) || t("results.farePending");
+    announceRoute(t("results.foundAnnouncement", {
+      profile: t(`profiles.${profile.id}`),
+      count: routeCount,
+      title: localizedDataText(plan.title),
+      duration: formatDuration(plan.minutes),
+      distance: formatDistance(plan.walkDistance ?? plan.distance),
+      fare
+    }));
   }
 
   function announceRoute(message) {
@@ -3179,7 +3364,7 @@
       return;
     }
     nav.hidden = false;
-    nav.innerHTML = `<span class="walk-segment-label">步行分段</span>${walks.map((item, walkIndex) => {
+    nav.innerHTML = `<span class="walk-segment-label">${escapeHtml(t("results.walkSegments"))}</span>${walks.map((item, walkIndex) => {
       const active = state.activeSegmentIndex === item.index;
       return `<button class="walk-segment-button ${active ? "is-active" : ""}" type="button" data-walk-segment-index="${item.index}" aria-pressed="${active}">${escapeHtml(walkSegmentOrdinal(walkIndex))}</button>`;
     }).join("")}`;
@@ -3199,28 +3384,28 @@
   }
 
   function walkSegmentOrdinal(index) {
-    return `${["第一", "第二", "第三", "第四", "第五", "第六"][index] || `第${index + 1}`}段步行`;
+    return t("walk.segmentOrdinal", { count: index + 1 });
   }
 
   function walkSegmentDetail(segment, walkIndex) {
     const metrics = segment.metrics || {};
-    const fromName = segment.fromName || state.start?.name || "起點";
-    const toName = segment.toName || state.end?.name || "下一個接駁點";
+    const fromName = segment.fromName ? localizedNameText(segment.fromName) : state.start ? localizedPlaceName(state.start) : t("place.start");
+    const toName = segment.toName ? localizedNameText(segment.toName) : state.end ? localizedPlaceName(state.end) : t("place.nextConnection");
     const features = [];
-    features.push(metrics.stairs ? `${metrics.stairs} 段樓梯` : metrics.stairsUnknown ? "樓梯資料待確認" : "已知路段未標示樓梯");
-    if (metrics.connectedRamps || metrics.ramps) features.push(`使用 ${metrics.connectedRamps || metrics.ramps} 處已連接斜道`);
-    if (metrics.connectedLifts || metrics.lifts) features.push(`使用 ${metrics.connectedLifts || metrics.lifts} 處已連接升降機`);
-    if (metrics.nearbyRamps) features.push(`附近 ${metrics.nearbyRamps} 處斜道標記`);
-    if (metrics.nearbyLifts) features.push(`附近 ${metrics.nearbyLifts} 處升降機標記`);
-    if (metrics.footbridges) features.push(`附近 ${metrics.footbridges} 座行人天橋結構`);
-    if (metrics.potentialEntrances) features.push(`${metrics.potentialEntrances} 個可能入口待核實`);
-    if (metrics.slopes) features.push("沿途有斜坡");
-    if (metrics.crossings) features.push(`${metrics.crossings} 處過路位置`);
+    features.push(metrics.stairs ? t("walk.stairs", { count: metrics.stairs }) : metrics.stairsUnknown ? t("walk.stairsUnknown") : t("walk.noKnownStairs"));
+    if (metrics.connectedRamps || metrics.ramps) features.push(t("walk.connectedRamps", { count: metrics.connectedRamps || metrics.ramps }));
+    if (metrics.connectedLifts || metrics.lifts) features.push(t("walk.connectedLifts", { count: metrics.connectedLifts || metrics.lifts }));
+    if (metrics.nearbyRamps) features.push(t("walk.nearbyRamps", { count: metrics.nearbyRamps }));
+    if (metrics.nearbyLifts) features.push(t("walk.nearbyLifts", { count: metrics.nearbyLifts }));
+    if (metrics.footbridges) features.push(t("walk.footbridges", { count: metrics.footbridges }));
+    if (metrics.potentialEntrances) features.push(t("walk.possibleEntrances", { count: metrics.potentialEntrances }));
+    if (metrics.slopes) features.push(t("walk.slopes"));
+    if (metrics.crossings) features.push(t("walk.crossings", { count: metrics.crossings }));
     const routeNote = segment.routed === false || metrics.fallback
-      ? "部分位置未能連上完整步行路網，距離按附近道路保守估算。"
+      ? t("walk.fallbackNote")
       : metrics.officialPedestrianRoute
-        ? "此段由地政總署 3D 行人路線搜尋服務計算。"
-        : "此段按已載入的步行路網計算。";
+        ? t("walk.officialNote")
+        : t("walk.networkNote");
     const confidence = metrics.confidence || (metrics.fallback ? "fallback" : [
       metrics.entranceConnectionUnknown,
       metrics.stairsUnknown,
@@ -3231,28 +3416,25 @@
       metrics.unknownCrossingAssist
     ].some(Boolean) ? "partial" : "connected");
     const confidenceNote = {
-      fallback: "可信度：估算路段，不能作為無障礙通行保證。",
-      partial: "可信度：路網已連接，但部分通行資料待確認。",
-      connected: "可信度：路網與所列無障礙連接均有明確資料。"
+      fallback: t("walk.confidenceFallback"),
+      partial: t("walk.confidencePartial"),
+      connected: t("walk.confidenceConnected")
     }[confidence];
     const unknownDetails = [];
-    if (metrics.entranceConnectionUnknown) unknownDetails.push("入口與步行路網的實際連接");
-    if (metrics.startAccessConfidence === "uncertain") unknownDetails.push("起點與步行路網之間的接入");
-    if (metrics.endAccessConfidence === "uncertain") unknownDetails.push("終點與步行路網之間的接入");
     const surfaceDetails = [
-      metrics.unknownSurface ? "路面材質" : "",
-      metrics.unknownWidth ? "通道闊度" : "",
-      metrics.unknownCurb ? "路緣" : ""
+      metrics.unknownSurface ? t("walk.unknownSurface") : "",
+      metrics.unknownWidth ? t("walk.unknownWidth") : "",
+      metrics.unknownCurb ? t("walk.unknownCurb") : ""
     ].filter(Boolean);
-    if (surfaceDetails.length) unknownDetails.push(surfaceDetails.join("、"));
-    if (metrics.unknownSlopeDetails) unknownDetails.push("斜坡的詳細坡度");
-    if (metrics.unknownCrossingAssist) unknownDetails.push("過路處的有聲或觸覺輔助");
-    const unknownNote = unknownDetails.length ? `${unknownDetails.join("；")}資料待確認。` : "";
+    if (surfaceDetails.length) unknownDetails.push(surfaceDetails.join(state.language === "en" ? ", " : "、"));
+    if (metrics.unknownSlopeDetails) unknownDetails.push(t("walk.unknownSlope"));
+    if (metrics.unknownCrossingAssist) unknownDetails.push(t("walk.unknownCrossingAssist"));
+    const unknownNote = unknownDetails.length ? t("walk.unknownNote", { details: unknownDetails.join(state.language === "en" ? ", " : "；") }) : "";
     return `<div class="walk-segment-detail-header">
       <strong>${escapeHtml(walkSegmentOrdinal(walkIndex))}</strong>
-      <span>${escapeHtml(formatDistance(segment.distance || 0))} · 約 ${escapeHtml(formatDuration(segment.minutes || 0))}</span>
+      <span>${escapeHtml(t("walk.approxDuration", { distance: formatDistance(segment.distance || 0), duration: formatDuration(segment.minutes || 0) }))}</span>
     </div>
-    <p>由「${escapeHtml(fromName)}」步行至「${escapeHtml(toName)}」。</p>
+    <p>${escapeHtml(t("walk.fromTo", { from: fromName, to: toName }))}</p>
     <div class="walk-segment-features">${features.map((feature) => `<span>${escapeHtml(feature)}</span>`).join("")}</div>
     <p class="walk-segment-note">${escapeHtml(routeNote)}</p>
     <p class="walk-segment-note">${escapeHtml(confidenceNote)}</p>
@@ -3264,7 +3446,7 @@
     if (!segment) return;
     if (state.activeSegmentIndex === index) {
       fitRoute({ revealMap: true, preserveResultsState: isMobileResultsLayout() });
-      setStatus("已顯示" + (state.route.title || "所選路線") + "整條路線。");
+      setStatus(t("status.routeShown", { route: localizedDataText(state.route.title) || t("status.selectedRoute") }));
       if (options.restoreFocus) {
         requestAnimationFrame(() => {
           document.querySelector('[data-journey-segment-index="' + index + '"]')?.focus({ preventScroll: true });
@@ -3286,8 +3468,12 @@
       scrollWalkDetailIntoView();
     }
     focusSegmentGeometry(segment);
-    const modeLabel = segment.mode === "walk" ? "步行路段" : segment.label || "行程路段";
-    setStatus(`${modeLabel}：${segment.fromName || "起點"}至${segment.toName || "下一站"}。`);
+    const modeLabel = segment.mode === "walk" ? t("status.walkSegment") : localizedDataText(segment.label) || t("status.journeySegment");
+    setStatus(t("status.segment", {
+      mode: modeLabel,
+      from: segment.fromName ? localizedNameText(segment.fromName) : t("place.start"),
+      to: segment.toName ? localizedNameText(segment.toName) : t("status.nextStop")
+    }));
   }
 
   function scrollWalkDetailIntoView() {
@@ -3397,6 +3583,7 @@
   }
 
   function renderNoRoute(result, options = {}) {
+    state.resultStatus = "no-route";
     if (!options.preserveResultsState) setResultsExpanded(false);
     state.unavailableRoutes = result?.unavailableRoutes || [];
     state.departure = result?.departure || null;
@@ -3406,16 +3593,16 @@
     document.getElementById("route-options").innerHTML = "";
     clearSegmentUi();
     renderJourneyFlow(null);
-    document.getElementById("results-title").textContent = "暫未找到可行路線";
+    document.getElementById("results-title").textContent = t("results.noRoute");
     document.getElementById("summary-distance").textContent = "--";
     document.getElementById("summary-time").textContent = "--";
     document.getElementById("summary-fare").textContent = "--";
-    renderRiskBadge("未連通", "is-high");
+    renderRiskBadge(t("results.disconnected"), "is-high");
     renderRouteDataStatus(null);
     renderProfileSummary(null, state.profileNotice);
     renderServiceNotice();
-    setStatus("暫未找到可行路線。可改選附近地點或地圖點。");
-    announceRoute("暫未找到可行路線。請改選附近地點或使用地圖點選。");
+    setStatus(t("results.noRouteStatus"));
+    announceRoute(t("results.noRouteAnnouncement"));
   }
 
   function markerColor(type) {
@@ -3444,38 +3631,42 @@
       syncRouteNoticeStack();
       return;
     }
-    const extra = state.unavailableRoutes.length > items.length
-      ? `<p>\u53e6\u6709 ${state.unavailableRoutes.length - items.length} \u689d\u8def\u7dda\u5728\u8a72\u6642\u6bb5\u4e0d\u63d0\u4f9b\u3002</p>`
+    const localizedExtra = state.unavailableRoutes.length > items.length
+      ? `<p>${escapeHtml(t("service.extraUnavailable", { count: state.unavailableRoutes.length - items.length }))}</p>`
       : "";
     notice.hidden = false;
-    notice.innerHTML = `<strong>\u8a72\u6642\u6bb5\u672a\u63d0\u4f9b</strong><ul>${items.map((item) => `<li><span>${escapeHtml(item.label)}</span>${escapeHtml(item.reasonLabel || "\u73ed\u6b21\u8cc7\u6599\u5f85\u78ba\u8a8d")}</li>`).join("")}</ul>${extra}`;
+    localizeRenderedServiceNotice(notice, items, localizedExtra);
     syncRouteNoticeStack();
+  }
+
+  function localizeRenderedServiceNotice(notice, items, localizedExtra) {
+    notice.innerHTML = `<strong>${escapeHtml(t("service.unavailable"))}</strong><ul>${items.map((item) => `<li><span>${escapeHtml(localizedDataText(item.label))}</span>${escapeHtml(localizedDataText(item.reasonLabel) || t("service.timetablePending"))}</li>`).join("")}</ul>${localizedExtra}`;
   }
 
   function departureSummaryText() {
     if (state.departure?.mode === "all" || state.departureMode === "all") {
-      return "全部路線 · 不按出發時間篩選";
+      return t("departure.allSummary");
     }
     if (state.departure?.mode === "planned" && state.departure.iso) {
       const date = new Date(state.departure.iso);
-      const label = date.toLocaleString("zh-HK", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
-      return `\u8a08\u5283\u51fa\u767c \u00b7 ${label}`;
+      const label = date.toLocaleString(i18n.locale(), { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
+      return t("departure.plannedSummary", { date: label });
     }
     if (state.departureMode === "planned" && state.departureTime) {
       const date = new Date(state.departureTime);
-      const label = date.toLocaleString("zh-HK", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
-      return `\u8a08\u5283\u51fa\u767c \u00b7 ${label}`;
+      const label = date.toLocaleString(i18n.locale(), { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
+      return t("departure.plannedSummary", { date: label });
     }
-    return "\u7acb\u5373\u51fa\u767c \u00b7 \u512a\u5148\u4f7f\u7528\u5373\u6642\u5230\u7ad9";
+    return t("departure.nowSummary");
   }
 
   function renderResults(plan) {
-    document.getElementById("results-title").textContent = plan.title;
+    document.getElementById("results-title").textContent = localizedDataText(plan.title);
     document.getElementById("summary-distance").textContent = formatDistance(plan.walkDistance ?? plan.distance);
     document.getElementById("summary-time").textContent = formatDuration(plan.minutes);
-    document.getElementById("summary-fare").textContent = plan.fareLabel || "車費待查";
+    document.getElementById("summary-fare").textContent = localizedDataText(plan.fareLabel) || t("results.farePending");
     const partialData = (plan.segments || []).some((segment) => segment.mode === "walk" && (segment.metrics?.fallback || segment.routed === false));
-    renderRiskBadge(plan.risk?.label || "可比較", plan.risk?.className || "is-neutral", partialData);
+    renderRiskBadge(localizedDataText(plan.risk?.label) || t("results.comparable"), plan.risk?.className || "is-neutral", partialData);
     renderRouteDataStatus(plan);
     renderProfileSummary(plan, state.profileNotice);
     renderServiceNotice();
@@ -3514,6 +3705,8 @@
       .map((segment) => segment.geometry);
     const nearby = MapableBabycareService.nearSegments(state.babycareData.items, walkingGeometries, 180);
     const summary = MapableBabycareService.summarize(nearby);
+    container.dataset.babycareRooms = String(summary.rooms || 0);
+    container.dataset.babycareFriendly = String(summary.friendlyPremises || 0);
     const facts = [];
     if (summary.rooms) facts.push("\u5df2\u6536\u9304 " + summary.rooms + " \u9593\u80b2\u5b30\u6216\u54fa\u4e73\u8a2d\u65bd");
     if (summary.friendlyPremises) facts.push(summary.friendlyPremises + " \u500b\u6bcd\u4e73\u9935\u54fa\u53cb\u5584\u5834\u6240");
@@ -3534,13 +3727,44 @@
   }
 
   function babycareSummaryToggle() {
-    const label = state.babycareVisible ? "\u96b1\u85cf\u5730\u5716\u9ede" : "\u986f\u793a\u5730\u5716\u9ede";
+    const label = t(state.babycareVisible ? "facility.hideMapPoints" : "facility.showMapPoints");
     return '<button class="babycare-summary-toggle" type="button" data-babycare-summary-toggle aria-pressed="' + state.babycareVisible
       + '" aria-label="' + label + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3.5-6 9-6 9 6 9 6-3.5 6-9 6-9-6-9-6Z"/><circle cx="12" cy="12" r="2.5"/></svg><span>' + label + "</span></button>";
   }
 
   function bindBabycareSummaryToggle(container) {
+    localizeBabycareRouteSummarySurface(container);
     container.querySelector("[data-babycare-summary-toggle]")?.addEventListener("click", () => toggleBabycareLayer({ restoreFocus: true }));
+  }
+
+  function localizeBabycareRouteSummarySurface(container) {
+    const heading = container.querySelector(".babycare-route-heading strong");
+    if (heading) heading.textContent = t("facility.routeNearbyHeading");
+    const message = container.querySelector(":scope > p");
+    if (message) {
+      if (!state.babycareData) {
+        message.textContent = t("facility.routeLoading");
+      } else {
+        const facts = [];
+        const rooms = Number(container.dataset.babycareRooms) || 0;
+        const friendly = Number(container.dataset.babycareFriendly) || 0;
+        if (rooms) facts.push(t("facility.routeRooms", { count: rooms }));
+        if (friendly) facts.push(t("facility.routeFriendly", { count: friendly }));
+        message.textContent = facts.length
+          ? t("facility.routeNearby", { facts: facts.join(state.language === "en" ? "; " : "，另有") })
+          : t("facility.routeNone");
+      }
+    }
+    container.querySelectorAll("[data-babycare-facility-id]").forEach((button) => {
+      const facility = state.babycareData?.items?.find((item) => item.id === button.dataset.babycareFacilityId);
+      if (!facility) return;
+      const name = button.querySelector("span");
+      const meta = button.querySelector("small");
+      if (name) name.textContent = localizedFacilityName(facility);
+      if (meta) meta.textContent = localizedDataText(facility.sourceLabel) + " · " + formatDistance(facility.routeDistance || 0);
+    });
+    const note = container.querySelector(".babycare-route-note");
+    if (note) note.textContent = t("facility.routeReliableOnly");
   }
 
   function scheduleBabycareRouteListLayout() {
@@ -3584,6 +3808,9 @@
     const messages = [];
     if (fallbackWalks.length) messages.push(`${fallbackWalks.length} 段步行未能連上完整步行路網，距離按附近道路保守估算。`);
     if (fallbackExits.length) messages.push("目的站出口資料待補充；尾段由車站位置估算。");
+    messages.length = 0;
+    if (fallbackWalks.length) messages.push(t("routeData.walkFallback", { count: fallbackWalks.length }));
+    if (fallbackExits.length) messages.push(t("routeData.exitFallback"));
     const needsConfirmation = messages.length > 0;
     status.textContent = messages.join(" ");
     status.hidden = !needsConfirmation;
@@ -3596,13 +3823,18 @@
     const serviceNotice = document.getElementById("service-notice");
     if (!stack || !routeStatus || !serviceNotice) return;
     stack.hidden = routeStatus.hidden && serviceNotice.hidden;
+    if (!serviceNotice.hidden) {
+      const items = (state.unavailableRoutes || []).slice(0, 4);
+      const extraCount = Math.max(0, state.unavailableRoutes.length - items.length);
+      localizeRenderedServiceNotice(serviceNotice, items, extraCount ? `<p>${escapeHtml(t("service.extraUnavailable", { count: extraCount }))}</p>` : "");
+    }
   }
 
   function renderProfileSummary(plan, notice = "") {
     const container = document.getElementById("profile-summary");
     if (!container) return;
     const explanation = plan?.profileExplanation || null;
-    const rows = [notice || explanation?.primary, notice ? explanation?.primary : explanation?.secondary].filter(Boolean).slice(0, 2);
+    const rows = [notice || explanation?.primary, notice ? explanation?.primary : explanation?.secondary].filter(Boolean).slice(0, 2).map(localizedDataText);
     container.hidden = rows.length === 0;
     container.innerHTML = rows.map((text, index) => {
       const caution = Boolean(notice) || index === 1;
@@ -3618,28 +3850,28 @@
     if (!container) return;
     const items = plan?.timeline || [];
     if (!items.length) {
-      container.innerHTML = `<div class="journey-empty">選擇路線後會顯示每一段行程。</div>`;
+      container.innerHTML = `<div class="journey-empty">${escapeHtml(t("journey.empty"))}</div>`;
       return;
     }
     container.innerHTML = items.map((item, index) => {
       const isFinal = index === items.length - 1;
       const color = escapeHtml(item.color || "#1d9bf0");
       const modeLabel = routeModeLabel(item.mode);
-      const badgeLabel = item.routeNo || modeLabel;
+      const badgeLabel = item.routeNo ? localizedDataText(item.routeNo) : modeLabel;
       const routeBadge = item.mode === "walk"
         ? ""
         : `<span class="journey-route-badge is-${routeModeClass(item.mode)}" style="--route-color:${color}">${routeModeIcon(item.mode)}<span>${escapeHtml(badgeLabel)}</span></span>`;
-      const provider = item.providerLabel ? `<span>${escapeHtml(item.providerLabel)}</span>` : "";
-      const titleLabel = journeyTitleLabel(item);
+      const provider = item.providerLabel ? `<span>${escapeHtml(localizedDataText(item.providerLabel))}</span>` : "";
+      const titleLabel = localizedJourneyTitle(item);
       const exitInstruction = journeyMtrExitMarkup(item);
       const terminal = item.toName
-        ? `<strong>${escapeHtml(item.toName)}</strong>${item.mode === "mtr" ? "<span>下車</span>" + exitInstruction : ""}`
+        ? `<strong>${escapeHtml(localizedJourneyName(item.toName, item.toNameEn))}</strong>${item.mode === "mtr" ? "<span>" + escapeHtml(t("journey.alight")) + "</span>" + exitInstruction : ""}`
         : "";
       const eta = item.etaTime
-        ? `<span class="journey-eta">下一班 ${escapeHtml(item.etaTime)}</span>`
+        ? `<span class="journey-eta">${escapeHtml(t("journey.nextBus", { time: localizedEtaTime(item.etaTime) }))}</span>`
         : "";
       const operationStatus = !item.etaTime && item.etaStatus
-        ? `<span class="journey-operation-status">${escapeHtml(item.etaStatus)}</span>`
+        ? `<span class="journey-operation-status">${escapeHtml(state.language === "en" ? t("journey.arrivalPending") : localizedDataText(item.etaStatus))}</span>`
         : "";
       const active = state.activeSegmentIndex === index;
       const transitStops = journeyTransitStopNames(item);
@@ -3647,21 +3879,26 @@
       const stopsExpanded = active && hasTransitStops;
       const stopCount = Math.max(0, transitStops.length - 1);
       const stopSummary = hasTransitStops
-        ? `<span class="journey-stops-summary"><span>沿途 ${stopCount} 站</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></span>`
+        ? `<span class="journey-stops-summary"><span>${escapeHtml(t("journey.stops", { count: stopCount }))}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></span>`
         : "";
       const serviceMeta = eta || operationStatus || stopSummary
         ? `<span class="journey-service-meta">${eta}${operationStatus}${stopSummary}</span>`
         : "";
-      const metaDetail = item.metaDetail
-        ? `<span class="journey-meta-detail">${escapeHtml(item.metaDetail)}</span>`
+      const localizedMeta = localizedJourneyMeta(item);
+      const localizedMetaDetail = localizedJourneyMetaDetail(item);
+      const metaDetail = localizedMetaDetail
+        ? `<span class="journey-meta-detail">${escapeHtml(localizedMetaDetail)}</span>`
         : "";
       const stopList = stopsExpanded ? journeyTransitStopsMarkup(transitStops) : "";
       const stepTime = formatTimelineMinute(item.startMinute || 0);
-      const accessibleLabel = "第 " + (index + 1) + " 段，" + stepTime + "，" + modeLabel + "，" + titleLabel
-        + (item.meta ? "，" + item.meta : "") + (item.metaDetail ? "，" + item.metaDetail : "")
-        + (item.toName ? "，前往" + item.toName : "")
-        + journeyMtrExitAccessibleText(item)
-        + (hasTransitStops ? `，沿途 ${stopCount} 站，${stopsExpanded ? "站點已展開" : "站點已收起"}` : "");
+      const accessibleLabel = [
+        t("journey.segmentAccessible", { count: index + 1, time: stepTime, mode: modeLabel, title: titleLabel }),
+        localizedMeta,
+        localizedMetaDetail,
+        item.toName ? t("journey.goTo", { place: localizedJourneyName(item.toName, item.toNameEn) }) : "",
+        journeyMtrExitAccessibleText(item),
+        hasTransitStops ? `${t("journey.stops", { count: stopCount })}, ${t(stopsExpanded ? "journey.stopsExpanded" : "journey.stopsCollapsed")}` : ""
+      ].filter(Boolean).join(", ");
       const selectionIcon = '<svg class="journey-selected-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 12 4 4 8-9"/></svg>';
       const endpointMarker = isFinal
         ? '<svg class="journey-end-marker" viewBox="0 0 24 24" aria-hidden="true">' + destinationPinPaths() + "</svg>"
@@ -3671,7 +3908,7 @@
         <div class="journey-line"><span></span>${endpointMarker}</div>
         <div class="journey-leg">
           <div class="journey-title"><span class="journey-step-number"><span aria-hidden="true">${index + 1}</span></span>${routeBadge}<span>${escapeHtml(titleLabel)}</span>${selectionIcon}</div>
-          <div class="journey-meta">${provider}<span>${escapeHtml(item.meta || "")}</span>${metaDetail}${serviceMeta}</div>
+          <div class="journey-meta">${provider}<span>${escapeHtml(localizedMeta)}</span>${metaDetail}${serviceMeta}</div>
           ${terminal ? `<div class="journey-stop">${terminal}</div>` : ""}
           ${stopList}
         </div>
@@ -3682,17 +3919,75 @@
     });
   }
 
+  function localizedJourneyName(name, nameEn = "") {
+    return state.language === "en" && nameEn ? nameEn : localizedNameText(name);
+  }
+
+  function localizedJourneyMeta(item) {
+    if (item.mode === "walk") {
+      return t("journey.walkMeta", {
+        distance: formatDistance(item.distance || 0),
+        duration: formatDuration(item.minutes || 0)
+      });
+    }
+    const parts = [];
+    if (Number.isFinite(item.waitMinutes)) parts.push(t("journey.waitApprox", { duration: formatDuration(item.waitMinutes) }));
+    else parts.push(t("journey.arrivalPending"));
+    if (Number.isFinite(item.rideMinutes)) parts.push(t("journey.rideApprox", { duration: formatDuration(item.rideMinutes) }));
+    if (item.stopCount) parts.push(`(${t("journey.stops", { count: item.stopCount })})`);
+    return parts.join(", ");
+  }
+
+  function localizedJourneyMetaDetail(item) {
+    const metrics = item.metrics;
+    if (!metrics) return localizedDataText(item.metaDetail || "");
+    const parts = [];
+    if (metrics.connectedRamps || metrics.ramps) parts.push(t("walk.connectedRamps", { count: metrics.connectedRamps || metrics.ramps }));
+    if (metrics.connectedLifts || metrics.lifts) parts.push(t("walk.connectedLifts", { count: metrics.connectedLifts || metrics.lifts }));
+    if (metrics.nearbyRamps) parts.push(t("walk.nearbyRamps", { count: metrics.nearbyRamps }));
+    if (metrics.nearbyLifts) parts.push(t("walk.nearbyLifts", { count: metrics.nearbyLifts }));
+    if (metrics.footbridges) parts.push(t("walk.footbridges", { count: metrics.footbridges }));
+    if (metrics.stairs) parts.push(t("walk.stairs", { count: metrics.stairs }));
+    if (metrics.slopes) parts.push(t("walk.slopes"));
+    return parts.join(", ");
+  }
+
+  function localizedEtaTime(value) {
+    const source = String(value || "").trim();
+    if (state.language !== "en") return source;
+    const clock = source.match(/^(\u4e0a\u5348|\u4e0b\u5348)\s*(\d{1,2}):(\d{2})$/u);
+    if (clock) {
+      let hour = Number(clock[2]);
+      if (clock[1] === "\u4e0b\u5348" && hour < 12) hour += 12;
+      if (clock[1] === "\u4e0a\u5348" && hour === 12) hour = 0;
+      return `${String(hour).padStart(2, "0")}:${clock[3]}`;
+    }
+    const minutes = source.match(/(\d+)\s*\u5206\u9418/u);
+    return minutes ? `${minutes[1]} m` : localizedDataText(source);
+  }
+
+  function localizedJourneyTitle(item) {
+    if (item.mode === "walk") {
+      const destination = localizedJourneyName(item.toName, item.toNameEn || item.destinationEn);
+      return destination ? t("journey.walkTo", { destination }) : t("mode.walk");
+    }
+    const destination = item.destinationEn || item.destination || "";
+    return destination
+      ? t("journey.to", { destination: localizedJourneyName(item.destination, item.destinationEn) })
+      : localizedDataText(item.label) || t("mode.route");
+  }
+
   function journeyTransitStopNames(item) {
     return (Array.isArray(item?.stops) ? item.stops : [])
-      .map((name) => String(name || "").trim())
-      .filter(Boolean)
-      .filter((name, index, names) => index === 0 || name !== names[index - 1]);
+      .map((name, index) => item?.stopsEn?.[index] || localizedNameText(name))
+     .filter(Boolean)
+     .filter((name, index, names) => index === 0 || name !== names[index - 1]);
   }
 
   function journeyTransitStopsMarkup(stops) {
     const lastIndex = stops.length - 1;
     const items = stops.map((name, index) => {
-      const role = index === 0 ? "上車" : index === lastIndex ? "下車" : "";
+      const role = index === 0 ? t("journey.board") : index === lastIndex ? t("journey.alight") : "";
       const roleMarkup = role ? `<small>${role}</small>` : "";
       return `<li class="${index === 0 ? "is-boarding" : ""} ${index === lastIndex ? "is-alighting" : ""}">
         <span class="journey-stop-marker" aria-hidden="true"></span>
@@ -3701,54 +3996,59 @@
       </li>`;
     }).join("");
     return `<div class="journey-transit-stops">
-      <div class="journey-transit-stops-heading"><strong>沿途站點</strong><span>${stops.length} 個停靠站</span></div>
+      <div class="journey-transit-stops-heading"><strong>${escapeHtml(t("journey.stopsHeading"))}</strong><span>${escapeHtml(t("journey.stopCount", { count: stops.length }))}</span></div>
       <ol>${items}</ol>
     </div>`;
   }
 
   function journeyTitleLabel(item) {
     const destination = String(item?.destination || "").replace(/^往\s*/u, "").trim();
-    if (item?.mode !== "walk" && destination) return "往" + destination;
-    return item?.label || "路線";
+    if (item?.mode !== "walk" && destination) return t("journey.to", { destination: localizedNameText(destination) });
+    return localizedDataText(item?.label) || t("mode.route");
   }
 
   function journeyMtrExitMarkup(item) {
     if (item?.mode !== "mtr" || !item.alightingStationCode) return "";
     if (!item.alightingExit) return "";
     const exit = item.alightingExit;
-    return '<span class="journey-mtr-exit"><img class="journey-exit-icon" src="assets/MTR_Exit_Sign.svg" alt="出口"><span class="journey-exit-instruction">於 <strong class="journey-exit-code">'
-      + escapeHtml(exit.displayLabel) + "</strong> 出站</span></span>";
+    return '<span class="journey-mtr-exit"><img class="journey-exit-icon" src="assets/MTR_Exit_Sign.svg" alt="' + escapeHtml(t("journey.exitAlt")) + '"><span class="journey-exit-instruction">'
+      + t("journey.exitInstruction", { exit: '<strong class="journey-exit-code">' + escapeHtml(exit.displayLabel) + "</strong>" }) + "</span></span>";
   }
 
   function journeyMtrExitAccessibleText(item) {
     if (item?.mode !== "mtr" || !item.alightingStationCode) return "";
-    if (!item.alightingExit) return "，出口資料待補充，尾段由車站位置估算";
+    if (!item.alightingExit) return t("journey.exitDataFallback");
     const grouped = Array.isArray(item.alightingExit.labels) && item.alightingExit.labels.length > 1;
-    return "，於 " + item.alightingExit.displayLabel + (grouped ? " 出口一帶出站" : " 出站")
-      + "，" + mtrExitAccessibilityText(item.alightingExit);
+    return t(grouped ? "journey.exitGrouped" : "journey.exitSingle", { exit: item.alightingExit.displayLabel })
+      + ", " + mtrExitAccessibilityText(item.alightingExit);
   }
 
   function formatTimelineMinute(minutes) {
     if (state.departure?.mode === "planned" && state.departure.iso) {
       const time = new Date(new Date(state.departure.iso).getTime() + Math.max(0, minutes) * 60000);
-      return time.toLocaleTimeString("zh-HK", { hour: "2-digit", minute: "2-digit", hour12: false });
+      return time.toLocaleTimeString(i18n.locale(), { hour: "2-digit", minute: "2-digit", hour12: false });
     }
     if (state.departure?.mode === "all" || state.departureMode === "all") {
-      return minutes ? formatElapsedTimelineMinute(minutes) : "出發";
+      return minutes ? formatElapsedTimelineMinute(minutes) : t("journey.depart");
     }
-    if (!minutes) return "現在";
+    if (!minutes) return t("journey.now");
     return formatElapsedTimelineMinute(minutes);
   }
 
   function formatElapsedTimelineMinute(minutes) {
     const totalMinutes = Math.max(0, Math.round(Number(minutes) || 0));
-    if (totalMinutes < 60) return `+${totalMinutes}分`;
+    if (totalMinutes < 60) return `+${t("common.minutes", { count: totalMinutes })}`;
     const hours = Math.floor(totalMinutes / 60);
     const remainingMinutes = totalMinutes % 60;
-    return remainingMinutes ? `+${hours}時 ${remainingMinutes}分` : `+${hours}時`;
+    return remainingMinutes ? `+${t("common.hours", { hours })} ${t("common.minutes", { count: remainingMinutes })}` : `+${t("common.hours", { hours })}`;
   }
 
-  function formatTimelineMinuteMarkup(label) {
+ function formatTimelineMinuteMarkup(label) {
+    if (state.language === "en") {
+      const englishMatch = String(label).match(/^(\+\d+\s+h)\s+(\d+\s+m)$/i);
+      if (!englishMatch) return `<span>${escapeHtml(label)}</span>`;
+      return `<span>${escapeHtml(englishMatch[1])}</span><span class="journey-time-minute">${escapeHtml(englishMatch[2])}</span>`;
+    }
     const match = String(label).match(/^(\+\d+時)\s+(\d+分)$/u);
     if (!match) return `<span>${escapeHtml(label)}</span>`;
     return `<span>${escapeHtml(match[1])}</span><span class="journey-time-minute">${escapeHtml(match[2])}</span>`;
@@ -3798,8 +4098,13 @@
     });
   }
 
+  function endpointMarkerLabel(kind) {
+    if (state.language === "en") return kind === "start" ? "S" : "D";
+    return kind === "start" ? "起" : state.language === "zh-Hans" ? "终" : "終";
+  }
+
   function mtrExitMarkerIcon(exit) {
-    const label = escapeHtml(exit?.displayLabel || "出口");
+    const label = escapeHtml(exit?.displayLabel || t("journey.exitAlt"));
     return L.divIcon({
       html: '<span class="mtr-exit-map-marker" aria-hidden="true"><img class="mtr-exit-map-icon" src="assets/MTR_Exit_Sign.svg" alt=""><strong>' + label + "</strong></span>",
       className: "mtr-exit-marker-wrapper",
@@ -3809,24 +4114,26 @@
   }
 
   function mtrExitFullName(exit) {
-    const station = exit?.stationNameZh || exit?.stationNameEn || exit?.stationCode || "港鐵";
-    const suffix = exit?.labels?.length > 1 ? "出口一帶" : "出口";
-    return station + "站 " + (exit?.displayLabel || "") + " " + suffix;
+    const station = state.language === "en"
+      ? exit?.stationNameEn || exit?.stationNameZh
+      : localizedDataText(exit?.stationNameZh || exit?.stationNameEn);
+    const suffix = t(exit?.labels?.length > 1 ? "mtrExit.groupSuffix" : "mtrExit.suffix");
+    return (station || t("mtrExit.station")) + (state.language === "en" ? " " : "站 ") + (exit?.displayLabel || "") + " " + suffix;
   }
 
   function mtrExitAccessibilityText(exit) {
     const access = exit?.accessibility || {};
     const connected = [
-      access.lift === "connected" ? "升降機" : "",
-      access.ramp === "connected" ? "斜道" : ""
+      access.lift === "connected" ? t("type.lift") : "",
+      access.ramp === "connected" ? t("type.ramp") : ""
     ].filter(Boolean);
-    if (connected.length) return connected.join("及") + "空間資料已匹配；實際連接及運作狀態請出發前核對。";
+    if (connected.length) return t("mtrExit.connected", { features: connected.join(state.language === "en" ? " and " : "及") });
     const nearby = [
-      access.lift === "nearby" ? "升降機" : "",
-      access.ramp === "nearby" ? "斜道" : ""
+      access.lift === "nearby" ? t("type.lift") : "",
+      access.ramp === "nearby" ? t("type.ramp") : ""
     ].filter(Boolean);
-    if (nearby.length) return "出口附近有" + nearby.join("及") + "；連接關係待核實。";
-    return "出口無障礙連接待核實。";
+    if (nearby.length) return t("mtrExit.nearby", { features: nearby.join(state.language === "en" ? " and " : "及") });
+    return t("mtrExit.unknown");
   }
 
   function originDotPaths() {
@@ -3890,41 +4197,20 @@
   }
 
   function formatDistance(meters) {
-    if (meters >= 1000) return `${(meters / 1000).toFixed(1)} 公里`;
-    return `${Math.max(0, Math.round(meters))} 米`;
+    if (meters >= 1000) return t("common.kilometers", { count: (meters / 1000).toFixed(1) });
+    return t("common.meters", { count: Math.max(0, Math.round(meters)) });
   }
 
   function formatDuration(minutes) {
     const totalMinutes = Math.max(0, Math.round(Number(minutes) || 0));
-    if (totalMinutes < 60) return `${totalMinutes}分`;
+    if (totalMinutes < 60) return t("common.minutes", { count: totalMinutes });
     const hours = Math.floor(totalMinutes / 60);
     const remainingMinutes = totalMinutes % 60;
-    return `${hours}時${remainingMinutes}分`;
+    return t("common.hoursMinutes", { hours, minutes: remainingMinutes });
   }
 
   function typeLabel(type) {
-    return {
-      airport: "機場",
-      rail: "鐵路站",
-      mtr: "港鐵站",
-      light_rail: "輕鐵站",
-      district: "行政區",
-      area: "地區",
-      estate: "屋苑 / 屋邨",
-      government: "政府服務",
-      attraction: "景點",
-      toilet: "無障礙洗手間",
-      bus: "巴士站",
-      gmb: "小巴站",
-      custom: "自選地點",
-      hospital: "醫院",
-      mall: "商場 / 店舖",
-      poi: "地點",
-      address: "地址",
-      lift: "升降機",
-      ramp: "斜道",
-      accessible: "無障礙設施"
-    }[type] || "地點";
+    return t(`type.${type || "poi"}`);
   }
 
   function setStatus(message) {

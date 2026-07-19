@@ -4784,6 +4784,8 @@ svg.route-origin-icon {
 }
 
 .settings-dialog-body {
+  display: grid;
+  gap: 12px;
   padding: 16px;
 }
 
@@ -4815,6 +4817,158 @@ svg.route-origin-icon {
   color: var(--muted);
   font-size: 0.88rem;
   font-weight: 500;
+}
+
+.settings-language-option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+
+.language-selector {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.language-selector button {
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
+  background: #ffffff;
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.language-selector button:last-child {
+  border-right: 0;
+}
+
+.language-selector button:hover,
+.language-selector button:focus-visible {
+  background: var(--ui-search-hover-bg, #edf5f2);
+}
+
+.language-selector button.is-active {
+  background: var(--ui-selected-bg, var(--teal));
+  color: var(--ui-selected-text, #ffffff);
+  box-shadow: inset 0 0 0 2px var(--ui-selected-border, var(--teal-dark));
+}
+
+html[data-contrast-mode="highContrast"] .language-selector {
+  border: 2px solid #111111;
+}
+
+html[data-contrast-mode="highContrast"] .language-selector button {
+  border-right: 2px solid #111111;
+}
+
+html[data-contrast-mode="highContrast"] .language-selector button:last-child {
+  border-right: 0;
+}
+
+html[data-contrast-mode="highContrast"] .language-selector button:hover,
+html[data-contrast-mode="highContrast"] .language-selector button.is-active {
+  background: #111111;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+html[data-language="en"] .profile-button,
+html[data-language="en"] .departure-mode-button {
+  overflow-wrap: anywhere;
+}
+
+html[data-language="en"] .planner-topline .profile-button {
+  width: max-content;
+  min-width: max-content;
+  max-width: none;
+  flex: 0 0 max-content;
+  overflow: visible;
+  white-space: nowrap;
+}
+
+html[data-language="en"] .planner-pane.is-collapsed .profile-strip,
+html[data-language="en"] .planner-pane.is-mobile-collapsed .profile-strip {
+  width: max-content;
+  min-width: max-content;
+  max-width: none;
+  overflow: visible;
+}
+
+html[data-language="en"] .planner-pane.is-collapsed .profile-button.is-active,
+html[data-language="en"] .planner-pane.is-mobile-collapsed .profile-button.is-active {
+  width: max-content;
+  min-width: max-content;
+  max-width: none;
+  flex: 0 0 max-content;
+  white-space: nowrap;
+}
+
+/* Narrow English phone headers use two rows when one row cannot hold all six Profiles. */
+@media (max-width: 760px) and (orientation: portrait) {
+  html[data-language="en"] .planner-pane:not(.is-mobile-collapsed) .planner-topline {
+    min-height: 120px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "logo"
+      "profiles";
+    grid-template-rows: 34px 72px;
+    gap: 4px;
+  }
+
+  html[data-language="en"] .planner-pane:not(.is-mobile-collapsed) .planner-topline .profile-strip {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    flex-wrap: wrap;
+    align-content: start;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    justify-self: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  html[data-language="en"] .planner-pane:not(.is-mobile-collapsed) .planner-topline .profile-button {
+    height: 34px;
+    min-height: 34px;
+    max-height: 34px;
+  }
+}
+
+/* English Profile labels keep their full text inside content-sized frames. */
+@media (min-width: 1121px), (max-width: 1120px) and (orientation: landscape) {
+  html[data-language="en"] .planner-topline .profile-strip {
+    width: max-content;
+    max-width: 100%;
+    grid-template-columns: repeat(6, max-content);
+  }
+
+  html[data-language="en"] .planner-topline .profile-button {
+    width: max-content;
+    min-width: max-content;
+    max-width: none;
+    overflow: visible;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .language-selector button {
+    padding-inline: 6px;
+    font-size: 0.84rem;
+  }
 }
 
 .settings-switch {
@@ -7155,6 +7309,10 @@ html[data-map-pick-mode] .map-message-stack {
   line-height: 25px;
 }
 
+.journey-title .journey-step-number {
+  align-self: flex-start;
+}
+
 .results-pane.is-collapsed .results-heading,
 .results-pane[data-mobile-state="collapsed"] .results-heading {
   display: flex;
@@ -8514,6 +8672,23 @@ html[data-contrast-mode="highContrast"] .facility-popup-route {
   margin-left: 0.72em;
 }
 
+html[data-language="en"] .journey-time-minute {
+  flex-basis: 100%;
+  margin-left: 0;
+}
+
+html[data-language="en"] .map-toolbar:not(.is-mobile-planner-collapsed) .facility-layer-toggle {
+  width: max-content;
+  min-width: max-content;
+  grid-template-columns: 20px max-content;
+  padding-inline: 10px;
+}
+
+html[data-language="en"] .map-toolbar:not(.is-mobile-planner-collapsed) .facility-layer-toggle > span {
+  width: auto;
+  min-width: max-content;
+}
+
 html[data-contrast-mode="highContrast"] .journey-item:hover :is(
   .journey-stops-summary,
   .journey-stops-summary span
@@ -8722,7 +8897,26 @@ html[data-contrast-mode="highContrast"] .search-results .search-option:is(:hover
 }
 
 .journey-item.is-final .journey-line::before {
-  bottom: 35px;
+  bottom: 37px;
+}
+
+.journey-item.is-final .journey-stop {
+  align-items: center;
+  min-height: 24px;
+}
+
+.journey-item.is-final .journey-stop > strong {
+  line-height: 24px;
+}
+
+.results-pane:not(.is-collapsed):not([data-mobile-state="collapsed"]) .panel-content {
+  padding-bottom: 28px;
+}
+
+@media (max-width: 1120px) and (orientation: portrait) {
+  .results-pane:not(.is-collapsed):not([data-mobile-state="collapsed"]) .panel-content {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
 }
 
 html[data-contrast-mode="highContrast"] .walk-segment-detail {
