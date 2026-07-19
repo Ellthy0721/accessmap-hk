@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mapable HK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@500;600;700;800;900&family=Noto+Sans+HK:wght@500;600;700;800;900&family=Noto+Sans+SC:wght@500;600;700;800;900&family=Noto+Sans+TC:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="icon" href="assets/favicon.png" type="image/png" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.6.0/air-datepicker.css" />
+    <link rel="stylesheet" href="styles/main.css?v=20260719-12" />
+  </head>
+  <body>
+    <a class="skip-link" href="#results-title">跳到路線結果</a>
+
+    <main class="app-shell">
+      <section class="map-pane" aria-label="地圖">
+        <div id="map" role="application" aria-label="Mapable HK 地圖"></div>
+        <div class="map-toolbar" aria-label="地圖工具">
+          <button id="fit-route" type="button"><span class="map-toolbar-range-label">&#22238;&#21040;&#36335;&#32218;</span></button>
+          <button id="fit-hk" type="button"><span class="map-toolbar-range-label">&#20840;&#28207;</span></button>
+          <button id="settings-button" class="map-icon-button" type="button" title="&#35373;&#23450;" aria-label="&#35373;&#23450;">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.2 2h-.4a2 2 0 0 0-2 2v.2a2 2 0 0 1-1 1.7l-.4.3a2 2 0 0 1-2 0l-.2-.1a2 2 0 0 0-2.7.7l-.2.4A2 2 0 0 0 4 9.9l.2.1a2 2 0 0 1 1 1.7v.6a2 2 0 0 1-1 1.7l-.2.1a2 2 0 0 0-.7 2.7l.2.4a2 2 0 0 0 2.7.7l.2-.1a2 2 0 0 1 2 0l.4.3a2 2 0 0 1 1 1.7v.2a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.2a2 2 0 0 1 1-1.7l.4-.3a2 2 0 0 1 2 0l.2.1a2 2 0 0 0 2.7-.7l.2-.4a2 2 0 0 0-.7-2.7l-.2-.1a2 2 0 0 1-1-1.7v-.6a2 2 0 0 1 1-1.7l.2-.1a2 2 0 0 0 .7-2.7l-.2-.4a2 2 0 0 0-2.7-.7l-.2.1a2 2 0 0 1-2 0l-.4-.3a2 2 0 0 1-1-1.7V4a2 2 0 0 0-2-2Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button id="locate-button" type="button" title="定位到目前位置" aria-label="定位到目前位置">
+            <svg class="locate-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
+            <span class="locate-text">允許定位服務</span>
+          </button>
+          <div class="facility-layer-controls" role="group" aria-label="&#22320;&#22294;&#35373;&#26045;&#27161;&#40670;">
+            <button id="babycare-layer-toggle" class="facility-layer-toggle babycare-layer-toggle" data-facility-layer="babycare" type="button" aria-pressed="false" aria-label="&#38283;&#21855;&#27597;&#23344;&#35373;&#26045;&#27161;&#40670;" title="&#27597;&#23344;&#35373;&#26045;" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v4l2 3v9a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-9l2-3V3Z"/><path d="M9 7h6M9 13h6"/></svg>
+              <span>&#27597;&#23344;&#35373;&#26045;</span>
+            </button>
+            <button id="public-toilet-layer-toggle" class="facility-layer-toggle public-toilet-layer-toggle" data-facility-layer="publicToilet" type="button" aria-pressed="false" aria-label="&#38283;&#21855;&#20844;&#20849;&#24257;&#25152;&#27161;&#40670;" title="&#20844;&#20849;&#24257;&#25152;">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="4.5" r="2"/><path d="M4 21v-7H2.5l1.2-6h6.6l1.2 6H10v7M17 6.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM14 21v-6h-1.5l1-7h7l1 7H20v6"/></svg>
+              <span>&#20844;&#20849;&#24257;&#25152;</span>
+            </button>
+            <button id="aed-layer-toggle" class="facility-layer-toggle aed-layer-toggle" data-facility-layer="aed" type="button" aria-pressed="false" aria-label="&#38283;&#21855; AED &#27161;&#40670;" title="AED">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.7a5.5 5.5 0 0 0-7.8 0L12 5.8l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.5a5.5 5.5 0 0 0 0-7.8Z"/><path d="m13 7-3 5h4l-3 5"/></svg>
+              <span>AED</span>
+            </button>
+          </div>
+        </div>
+        <span id="map-message-anchor" hidden></span>
+        <div class="map-message-stack">
+          <p id="map-status" class="map-status" role="status" aria-live="polite">選擇起點和終點後，會顯示建議路線。</p>
+        </div>
+      </section>
+
+      <div id="map-pick-actions" class="map-pick-actions" hidden>
+        <button id="confirm-map-pick" class="confirm-map-pick" type="button" hidden disabled>
+          <svg class="map-pick-target-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.5"/><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22"/></svg>
+          <span>確認選取</span>
+        </button>
+        <button id="cancel-map-pick" class="cancel-map-pick" type="button" aria-label="取消地圖點選">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          <span>取消點選</span>
+        </button>
+      </div>
+
+      <section id="map-info-panel" class="map-info-panel" aria-label="&#22320;&#22294;&#22320;&#40670;&#36039;&#26009;" aria-live="polite" hidden>
+        <button id="close-map-info" class="map-info-close" type="button" aria-label="&#38364;&#38281;&#22320;&#40670;&#36039;&#26009;" title="&#38364;&#38281;&#22320;&#40670;&#36039;&#26009;">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+        <div id="map-info-content" class="map-info-content"></div>
+      </section>
+
+      <div id="location-overlay" class="location-overlay" hidden>
+        <div>
+          <strong>正在定位中...</strong>
+          <span>請查看瀏覽器彈出視窗。</span>
+          <span>請耐心等待，若長時間不成功請刷新頁面。</span>
+        </div>
+      </div>
+
+      <section class="planner-pane floating-panel" aria-label="路線規劃" data-collapsible="planner">
+        <header class="panel-topline planner-topline">
+          <img class="brand-logo" src="assets/logoTC.png" alt="Mapable HK" />
+          <section class="profile-strip" aria-label="出行需要">
+            <button class="profile-button is-active" type="button" data-profile="senior" aria-pressed="true">長者</button>
+            <button class="profile-button" type="button" data-profile="wheelchair" aria-pressed="false" aria-label="輪椅人士或行動不便">輪椅</button>
+            <button class="profile-button" type="button" data-profile="lowVision" aria-pressed="false">視障</button>
+            <button class="profile-button" type="button" data-profile="colorVision" aria-pressed="false" aria-haspopup="true" aria-expanded="false" aria-label="色弱模式">色弱</button>
+            <button class="profile-button" type="button" data-profile="stroller" aria-pressed="false" aria-label="嬰兒車或照顧者">嬰兒車</button>
+            <button class="profile-button" type="button" data-profile="standard" aria-pressed="false">一般</button>
+          </section>
+          <section id="visual-mode-picker" class="visual-mode-picker" aria-label="色覺顯示方式" hidden>
+            <div role="group" aria-label="選擇色覺顯示方式">
+              <button class="visual-mode-button is-active" type="button" data-color-mode="redGreen" aria-pressed="true">
+                <span>紅綠色覺</span>
+              </button>
+              <button class="visual-mode-button" type="button" data-color-mode="blueYellow" aria-pressed="false">
+                <span>藍黃色覺</span>
+              </button>
+            </div>
+          </section>
+          <button id="toggle-planner" class="expand-results-button planner-collapse-button" type="button" data-collapse-target="planner" aria-expanded="true" aria-label="折疊路線規劃" title="折疊路線規劃">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path class="expand-icon" d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/>
+              <path class="restore-icon" d="M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5"/>
+            </svg>
+          </button>
+        </header>
+
+        <div class="panel-content">
+          <form id="route-form" class="route-form" autocomplete="off">
+            <div class="route-editor">
+              <div class="route-rail" aria-hidden="true">
+                <svg class="route-origin-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" /></svg>
+                <svg class="route-destination-icon" viewBox="0 0 24 24"><path d="M12 21s7-6.1 7-12A7 7 0 0 0 5 9c0 5.9 7 12 7 12Z"/><circle cx="12" cy="9" r="2.4"/></svg>
+              </div>
+
+              <div class="route-inputs">
+                <div class="field-stack route-field">
+                  <label class="sr-only" for="start-input">起點</label>
+                  <div class="search-line">
+                    <input id="start-input" type="search" placeholder="你的所在地或起點" />
+                    <button id="clear-start-input" class="search-clear-button" type="button" aria-label="清除起點" title="清除起點" hidden>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+                    </button>
+                  </div>
+                  <div id="start-results" class="search-results" role="listbox"></div>
+                </div>
+
+                <div class="field-stack route-field">
+                  <label class="sr-only" for="end-input">終點</label>
+                  <div class="search-line">
+                    <input id="end-input" type="search" placeholder="想去邊度？" />
+                    <button id="clear-end-input" class="search-clear-button" type="button" aria-label="清除終點" title="清除終點" hidden>
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 7 10 10M17 7 7 17"/></svg>
+                    </button>
+                  </div>
+                  <div id="end-results" class="search-results" role="listbox"></div>
+                </div>
+              </div>
+
+              <button id="swap-button" class="swap-button" type="button" title="交換起點和終點" aria-label="交換起點和終點">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7h8m0 0-3-3m3 3-3 3M16 17H8m0 0 3-3m-3 3 3 3"/></svg>
+              </button>
+            </div>
+
+            <div class="departure-editor" aria-label="&#20986;&#30332;&#26178;&#38291;">
+              <div class="departure-modes" role="group" aria-label="&#36984;&#25799;&#20986;&#30332;&#26178;&#38291;">
+                <button class="departure-mode-button is-active" type="button" data-departure-mode="now" aria-pressed="true"><span class="departure-mode-label-part">&#31435;&#21363;</span><wbr><span class="departure-mode-label-part">&#20986;&#30332;</span></button>
+                <button class="departure-mode-button" type="button" data-departure-mode="planned" aria-pressed="false"><span class="departure-mode-label-part">&#35336;&#21123;</span><wbr><span class="departure-mode-label-part">&#26178;&#38291;</span></button>
+                <button class="departure-mode-button" type="button" data-departure-mode="all" aria-pressed="false"><span class="departure-mode-label-part">全部</span><wbr><span class="departure-mode-label-part">路線</span></button>
+                <div class="departure-setting" aria-live="polite">
+                  <span id="departure-setting-label">即時班次與到站</span>
+                  <input id="departure-time-trigger" class="departure-time-trigger" type="text" placeholder="&#36984;&#25799;&#26085;&#26399;&#21644;&#26178;&#38291;" aria-label="&#36984;&#25799;&#26085;&#26399;&#21644;&#26178;&#38291;" aria-haspopup="dialog" inputmode="numeric" autocomplete="off" spellcheck="false" hidden disabled />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <button id="planner-panel-handle" class="planner-panel-handle panel-edge-handle" type="button" aria-label="&#25910;&#36215;&#36335;&#32218;&#35215;&#21123;" aria-expanded="true" aria-controls="route-form">
+          <svg viewBox="0 0 48 16" aria-hidden="true"><path d="M6 8h36"/></svg>
+        </button>
+      </section>
+
+      <aside class="results-pane floating-panel" aria-labelledby="results-title" data-collapsible="results" data-mobile-state="medium">
+        <header class="panel-topline results-header">
+          <button id="mobile-results-handle" class="mobile-results-handle" type="button" aria-label="展開路線結果" aria-expanded="false">
+            <svg viewBox="0 0 48 16" aria-hidden="true"><path d="M6 8h36"/></svg>
+          </button>
+          <div class="results-heading">
+            <p class="panel-kicker">建議</p>
+            <h2 id="results-title">未規劃路線</h2>
+          </div>
+          <div class="result-actions">
+            <span id="risk-badge" class="risk-badge is-neutral">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg>
+              <span>待選擇</span>
+            </span>
+            <button id="expand-results" class="expand-results-button" type="button" aria-pressed="false" aria-label="向上擴展路線結果" title="向上擴展路線結果">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path class="expand-icon" d="M9 4H4v5M15 4h5v5M9 20H4v-5M15 20h5v-5"/>
+                <path class="restore-icon" d="M4 9h5V4M20 9h-5V4M4 15h5v5M20 15h-5v5"/>
+              </svg>
+            </button>
+            <button class="collapse-button" type="button" data-collapse-target="results" aria-expanded="true" aria-label="摺疊路線結果">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="panel-content">
+          <p id="route-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+          <p id="departure-summary" class="departure-summary">&#31435;&#21363;&#20986;&#30332;</p>
+          <div id="route-options" class="route-options" aria-label="可選路線"></div>
+          <div id="walk-segment-nav" class="walk-segment-nav" aria-label="步行分段" hidden></div>
+          <section id="walk-segment-detail" class="walk-segment-detail" aria-live="polite" hidden></section>
+
+          <section class="summary-band" aria-label="路線摘要">
+            <div class="summary-travel-card">
+              <div class="summary-metric"><span>步行距離</span><strong id="summary-distance">--</strong></div>
+              <div class="summary-metric"><span>預計時間</span><strong id="summary-time">--</strong></div>
+            </div>
+            <div class="summary-fare-card"><span>車費</span><strong id="summary-fare">--</strong></div>
+          </section>
+          <section class="journey-section" aria-labelledby="journey-heading">
+            <h3 id="journey-heading" class="journey-heading">路線步驟</h3>
+            <div id="journey-flow" class="journey-flow"><div class="journey-empty">選擇路線後會顯示每一段行程。</div></div>
+          </section>
+          <section id="babycare-route-summary" class="babycare-route-summary" aria-live="polite" hidden></section>
+
+          <div id="route-notice-stack" class="route-notice-stack" hidden>
+            <p id="route-data-status" class="route-data-status" hidden></p>
+            <section id="service-notice" class="service-notice" aria-live="polite" hidden></section>
+          </div>
+          <section id="profile-summary" class="profile-summary" aria-live="polite" hidden></section>
+
+        </div>
+      </aside>
+    </main>
+
+    <dialog id="settings-dialog" class="settings-dialog" aria-labelledby="settings-title">
+      <section class="settings-dialog-surface">
+        <header class="settings-dialog-header">
+          <h2 id="settings-title">&#35373;&#23450;</h2>
+          <button id="close-settings" class="settings-dialog-close" type="button" aria-label="&#38364;&#38281;&#35373;&#23450;" title="&#38364;&#38281;&#35373;&#23450;">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+          </button>
+        </header>
+        <div class="settings-dialog-body">
+          <section class="settings-group" aria-labelledby="contrast-setting-title">
+            <div class="settings-option">
+              <div class="settings-option-copy">
+                <strong id="contrast-setting-title">高對比顯示</strong>
+                <span>加強文字、控件、圖標及路線的辨識度。</span>
+              </div>
+              <button id="contrast-mode-toggle" class="settings-switch" type="button" role="switch" aria-checked="false" aria-labelledby="contrast-setting-title">
+                <span class="settings-switch-track" aria-hidden="true"><span class="settings-switch-thumb"></span></span>
+              </button>
+            </div>
+          </section>
+          <p class="route-data-attribution">
+            <strong>路線資料：</strong>
+            <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
+            <strong aria-hidden="true">·</strong>
+            <a href="https://github.com/wheelstransit/hongkong-community-gtfs" target="_blank" rel="noopener">Hong Kong Community GTFS</a>
+            <strong aria-hidden="true">·</strong>
+            <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noopener">ODbL</a>
+            <strong aria-hidden="true">·</strong>
+            <a href="https://portal.csdi.gov.hk/csdi-webpage/apidoc/3d-pedestrian-route-search" target="_blank" rel="noopener">地政總署 3D 行人路線</a>
+            <strong aria-hidden="true">·</strong>
+            <a href="https://portal.csdi.gov.hk/csdi-webpage/apidoc/3d-indoor-mtr-station-map" target="_blank" rel="noopener">CSDI 港鐵出口</a>
+            <strong aria-hidden="true">·</strong>
+            <a href="https://api.hkmapservice.gov.hk/" target="_blank" rel="noopener">GeoInfo Map 鐵路出入口</a>
+            <strong aria-hidden="true">·</strong>
+            <a href="https://opendata.mtr.com.hk/" target="_blank" rel="noopener">港鐵開放資料</a>
+            <strong aria-hidden="true">&#183;</strong>
+            <a href="https://data.gov.hk/en-data/dataset/hk-fehd-fehdlocatn-fehd-facility-and-service-locations" target="_blank" rel="noopener">FEHD &#20844;&#24257;</a>
+            <strong aria-hidden="true">&#183;</strong>
+            <a href="https://portal.csdi.gov.hk/csdi-webpage/dataset/afcd_rcd_1635136427551_29173" target="_blank" rel="noopener">AFCD &#37066;&#37326;&#20844;&#22290;&#24257;&#25152;</a>
+            <strong aria-hidden="true">&#183;</strong>
+            <a href="https://data.gov.hk/tc-data/dataset/hk-fsd-fsd1-fsdaedapi" target="_blank" rel="noopener">FSD CARE AED</a>
+          </p>
+        </div>
+      </section>
+    </dialog>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin=""></script>
+    <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.6.0/air-datepicker.js"></script>
+    <script src="scripts/services/search-service.js"></script>
+    <script src="scripts/services/profile-service.js"></script>
+    <script src="scripts/services/babycare-service.js"></script>
+    <script src="scripts/services/facility-service.js?v=20260719-12"></script>
+    <script src="scripts/services/route-data-service.js?v=20260719-12"></script>
+    <script src="scripts/services/route-service.js?v=20260719-12"></script>
+    <script src="scripts/services/route-worker-client.js?v=20260719-12"></script>
+    <script src="scripts/main.js?v=20260719-12"></script>
+  </body>
+</html>

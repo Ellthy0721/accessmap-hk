@@ -1,0 +1,2491 @@
+{
+  "meta": {
+    "source": "MTR official master workbook v10",
+    "sourceFile": "mtr_official_master_v10.xlsx",
+    "stationCount": 98,
+    "lineCount": 10,
+    "edgeCount": 110,
+    "transferModel": "Frontend runtime station transfer profiles",
+    "builtAt": "2026-07-02",
+    "notes": "Heavy rail station graph from official MTR line station sequence. Frontend applies station-specific transfer profiles at runtime. Light Rail stop geometry not included in source workbook, so excluded from this graph."
+  },
+  "stations": [
+    {
+      "code": "ADM",
+      "nameZh": "金鐘",
+      "nameEn": "Admiralty",
+      "name": "金鐘 Admiralty",
+      "lat": 22.27838377000006,
+      "lng": 114.1659560600001,
+      "lineMembership": [
+        "EAL",
+        "ISL",
+        "TWL",
+        "SIL"
+      ],
+      "district": "CENTRAL & WESTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "AIR",
+      "nameZh": "機場",
+      "nameEn": "Airport",
+      "name": "機場 Airport",
+      "lat": 22.31590496000004,
+      "lng": 113.93646936000005,
+      "lineMembership": [
+        "AEL"
+      ],
+      "district": "ISLANDS DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "AUS",
+      "nameZh": "柯士甸",
+      "nameEn": "Austin",
+      "name": "柯士甸 Austin",
+      "lat": 22.304465600000043,
+      "lng": 114.16659318500007,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "YAU TSIM MONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "AWE",
+      "nameZh": "博覽館",
+      "nameEn": "AsiaWorld-Expo",
+      "name": "博覽館 AsiaWorld-Expo",
+      "lat": 22.32189716000005,
+      "lng": 113.94201466000004,
+      "lineMembership": [
+        "AEL"
+      ],
+      "district": "ISLANDS DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "CAB",
+      "nameZh": "銅鑼灣",
+      "nameEn": "Causeway Bay",
+      "name": "銅鑼灣 Causeway Bay",
+      "lat": 22.279579725000048,
+      "lng": 114.18386920000006,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "WAN CHAI DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "CEN",
+      "nameZh": "中環",
+      "nameEn": "Central",
+      "name": "中環 Central",
+      "lat": 22.28189474000007,
+      "lng": 114.15924279500007,
+      "lineMembership": [
+        "ISL",
+        "TWL"
+      ],
+      "district": "CENTRAL & WESTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "CHH",
+      "nameZh": "彩虹",
+      "nameEn": "Choi Hung",
+      "name": "彩虹 Choi Hung",
+      "lat": 22.33490520500004,
+      "lng": 114.20891985000009,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "WONG TAI SIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "CHW",
+      "nameZh": "柴灣",
+      "nameEn": "Chai Wan",
+      "name": "柴灣 Chai Wan",
+      "lat": 22.264598610000064,
+      "lng": 114.23712379000006,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "CIO",
+      "nameZh": "第一城",
+      "nameEn": "City One",
+      "name": "第一城 City One",
+      "lat": 22.382857310000077,
+      "lng": 114.20351871000003,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "CKT",
+      "nameZh": "車公廟",
+      "nameEn": "Che Kung Temple",
+      "name": "車公廟 Che Kung Temple",
+      "lat": 22.374768260000053,
+      "lng": 114.18617391000004,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "CSW",
+      "nameZh": "長沙灣",
+      "nameEn": "Cheung Sha Wan",
+      "name": "長沙灣 Cheung Sha Wan",
+      "lat": 22.335389320000047,
+      "lng": 114.15636591000009,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "SHAM SHUI PO DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "DIH",
+      "nameZh": "鑽石山",
+      "nameEn": "Diamond Hill",
+      "name": "鑽石山 Diamond Hill",
+      "lat": 22.33986856000007,
+      "lng": 114.20140561000005,
+      "lineMembership": [
+        "KTL",
+        "TML"
+      ],
+      "district": "WONG TAI SIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "DIS",
+      "nameZh": "迪士尼",
+      "nameEn": "Disneyland Resort",
+      "name": "迪士尼 Disneyland Resort",
+      "lat": 22.31539384000004,
+      "lng": 114.04490675500006,
+      "lineMembership": [
+        "DRL"
+      ],
+      "district": "TSUEN WAN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "ETS",
+      "nameZh": "尖東",
+      "nameEn": "East Tsim Sha Tsui",
+      "name": "尖東 East Tsim Sha Tsui",
+      "lat": 22.296206185000045,
+      "lng": 114.17389332500005,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "YAU TSIM MONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "EXC",
+      "nameZh": "會展",
+      "nameEn": "Exhibition Centre",
+      "name": "會展 Exhibition Centre",
+      "lat": 22.281607620000045,
+      "lng": 114.17519170500009,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "WAN CHAI DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "FAN",
+      "nameZh": "粉嶺",
+      "nameEn": "Fanling",
+      "name": "粉嶺 Fanling",
+      "lat": 22.492132260000062,
+      "lng": 114.13865056000009,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "NORTH DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "FOH",
+      "nameZh": "炮台山",
+      "nameEn": "Fortress Hill",
+      "name": "炮台山 Fortress Hill",
+      "lat": 22.287698465000034,
+      "lng": 114.19375932500003,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "FOT",
+      "nameZh": "火炭",
+      "nameEn": "Fo Tan",
+      "name": "火炭 Fo Tan",
+      "lat": 22.395607460000065,
+      "lng": 114.19835351000006,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HAH",
+      "nameZh": "坑口",
+      "nameEn": "Hang Hau",
+      "name": "坑口 Hang Hau",
+      "lat": 22.315828460000063,
+      "lng": 114.26416601000005,
+      "lineMembership": [
+        "TKL"
+      ],
+      "district": "SAI KUNG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HEO",
+      "nameZh": "恆安",
+      "nameEn": "Heng On",
+      "name": "恆安 Heng On",
+      "lat": 22.417504460000032,
+      "lng": 114.22574826000005,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HFC",
+      "nameZh": "杏花邨",
+      "nameEn": "Heng Fa Chuen",
+      "name": "杏花邨 Heng Fa Chuen",
+      "lat": 22.276540855000036,
+      "lng": 114.23963259500005,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HIK",
+      "nameZh": "顯徑",
+      "nameEn": "Hin Keng",
+      "name": "顯徑 Hin Keng",
+      "lat": 22.36392121000003,
+      "lng": 114.17079481000007,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HKU",
+      "nameZh": "香港大學",
+      "nameEn": "HKU",
+      "name": "香港大學 HKU",
+      "lat": 22.284562460000046,
+      "lng": 114.13474628500006,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "CENTRAL & WESTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HOK",
+      "nameZh": "香港",
+      "nameEn": "Hong Kong",
+      "name": "香港 Hong Kong",
+      "lat": 22.28468735000004,
+      "lng": 114.15815400500009,
+      "lineMembership": [
+        "AEL",
+        "TCL"
+      ],
+      "district": "CENTRAL & WESTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HOM",
+      "nameZh": "何文田",
+      "nameEn": "Ho Man Tin",
+      "name": "何文田 Ho Man Tin",
+      "lat": 22.31002551000006,
+      "lng": 114.18267521000007,
+      "lineMembership": [
+        "KTL",
+        "TML"
+      ],
+      "district": "KOWLOON CITY DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "HUH",
+      "nameZh": "紅磡",
+      "nameEn": "Hung Hom",
+      "name": "紅磡 Hung Hom",
+      "lat": 22.30243999500007,
+      "lng": 114.18180951000005,
+      "lineMembership": [
+        "EAL",
+        "TML"
+      ],
+      "district": "YAU TSIM MONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "JOR",
+      "nameZh": "佐敦",
+      "nameEn": "Jordan",
+      "name": "佐敦 Jordan",
+      "lat": 22.30487587500005,
+      "lng": 114.17170658000009,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "Yau Tsim Mong District",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KAT",
+      "nameZh": "啟德",
+      "nameEn": "Kai Tak",
+      "name": "啟德 Kai Tak",
+      "lat": 22.33053325000006,
+      "lng": 114.19948139000007,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "KOWLOON CITY DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KET",
+      "nameZh": "堅尼地城",
+      "nameEn": "Kennedy Town",
+      "name": "堅尼地城 Kennedy Town",
+      "lat": 22.28139994500006,
+      "lng": 114.12852850500008,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "CENTRAL & WESTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KOB",
+      "nameZh": "九龍灣",
+      "nameEn": "Kowloon Bay",
+      "name": "九龍灣 Kowloon Bay",
+      "lat": 22.32343380000006,
+      "lng": 114.21408140000005,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "KWUN TONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KOT",
+      "nameZh": "九龍塘",
+      "nameEn": "Kowloon Tong",
+      "name": "九龍塘 Kowloon Tong",
+      "lat": 22.33711721000003,
+      "lng": 114.17667566000011,
+      "lineMembership": [
+        "EAL",
+        "KTL"
+      ],
+      "district": "KOWLOON CITY DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KOW",
+      "nameZh": "九龍",
+      "nameEn": "Kowloon",
+      "name": "九龍 Kowloon",
+      "lat": 22.30478690000004,
+      "lng": 114.16173271000008,
+      "lineMembership": [
+        "AEL",
+        "TCL"
+      ],
+      "district": "Yau Tsim Mong District",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KSR",
+      "nameZh": "錦上路",
+      "nameEn": "Kam Sheung Road",
+      "name": "錦上路 Kam Sheung Road",
+      "lat": 22.434798010000037,
+      "lng": 114.06342001000007,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "YUEN LONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KWF",
+      "nameZh": "葵芳",
+      "nameEn": "Kwai Fong",
+      "name": "葵芳 Kwai Fong",
+      "lat": 22.356847360000046,
+      "lng": 114.12780741000006,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "KWAI TSING DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KWH",
+      "nameZh": "葵興",
+      "nameEn": "Kwai Hing",
+      "name": "葵興 Kwai Hing",
+      "lat": 22.363169210000052,
+      "lng": 114.13135901000004,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "KWAI TSING DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "KWT",
+      "nameZh": "觀塘",
+      "nameEn": "Kwun Tong",
+      "name": "觀塘 Kwun Tong",
+      "lat": 22.31214342000007,
+      "lng": 114.22657505000006,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "KWUN TONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LAK",
+      "nameZh": "茘景",
+      "nameEn": "Lai King",
+      "name": "茘景 Lai King",
+      "lat": 22.348323660000034,
+      "lng": 114.12615942000008,
+      "lineMembership": [
+        "TCL",
+        "TWL"
+      ],
+      "district": "KWAI TSING DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LAT",
+      "nameZh": "藍田",
+      "nameEn": "Lam Tin",
+      "name": "藍田 Lam Tin",
+      "lat": 22.306932110000048,
+      "lng": 114.2330639600001,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "KWUN TONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LCK",
+      "nameZh": "茘枝角",
+      "nameEn": "Lai Chi Kok",
+      "name": "茘枝角 Lai Chi Kok",
+      "lat": 22.336561355000043,
+      "lng": 114.14808383000008,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "Sham Shui Po District",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LET",
+      "nameZh": "利東",
+      "nameEn": "Lei Tung",
+      "name": "利東 Lei Tung",
+      "lat": 22.242199940000063,
+      "lng": 114.15601096000006,
+      "lineMembership": [
+        "SIL"
+      ],
+      "district": "SOUTHERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LHP",
+      "nameZh": "康城",
+      "nameEn": "LOHAS Park",
+      "name": "康城 LOHAS Park",
+      "lat": 22.295492030000048,
+      "lng": 114.26865198500008,
+      "lineMembership": [
+        "TKL"
+      ],
+      "district": "SAI KUNG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LMC",
+      "nameZh": "落馬洲",
+      "nameEn": "Lok Ma Chau",
+      "name": "落馬洲 Lok Ma Chau",
+      "lat": 22.515001210000065,
+      "lng": 114.0656820100001,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "YUEN LONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LOF",
+      "nameZh": "樂富",
+      "nameEn": "Lok Fu",
+      "name": "樂富 Lok Fu",
+      "lat": 22.337870460000033,
+      "lng": 114.1867580600001,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "WONG TAI SIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LOP",
+      "nameZh": "朗屏",
+      "nameEn": "Long Ping",
+      "name": "朗屏 Long Ping",
+      "lat": 22.447772620000052,
+      "lng": 114.02542286000005,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "YUEN LONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "LOW",
+      "nameZh": "羅湖",
+      "nameEn": "Lo Wu",
+      "name": "羅湖 Lo Wu",
+      "lat": 22.52806736000005,
+      "lng": 114.11371006000002,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "NORTH DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "MEF",
+      "nameZh": "美孚",
+      "nameEn": "Mei Foo",
+      "name": "美孚 Mei Foo",
+      "lat": 22.338317955000065,
+      "lng": 114.13819322500007,
+      "lineMembership": [
+        "TML",
+        "TWL"
+      ],
+      "district": "Sham Shui Po District",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "MKK",
+      "nameZh": "旺角東",
+      "nameEn": "Mong Kok East",
+      "name": "旺角東 Mong Kok East",
+      "lat": 22.322162030000072,
+      "lng": 114.17271160500007,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "Yau Tsim Mong District",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "MOK",
+      "nameZh": "旺角",
+      "nameEn": "Mong Kok",
+      "name": "旺角 Mong Kok",
+      "lat": 22.319467410000044,
+      "lng": 114.16936721000008,
+      "lineMembership": [
+        "KTL",
+        "TWL"
+      ],
+      "district": "YAU TSIM MONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "MOS",
+      "nameZh": "馬鞍山",
+      "nameEn": "Ma On Shan",
+      "name": "馬鞍山 Ma On Shan",
+      "lat": 22.424794560000038,
+      "lng": 114.23160726000009,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "NAC",
+      "nameZh": "南昌",
+      "nameEn": "Nam Cheong",
+      "name": "南昌 Nam Cheong",
+      "lat": 22.326542105000044,
+      "lng": 114.15382419000002,
+      "lineMembership": [
+        "TML",
+        "TCL"
+      ],
+      "district": "SHAM SHUI PO DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "NOP",
+      "nameZh": "北角",
+      "nameEn": "North Point",
+      "name": "北角 North Point",
+      "lat": 22.29115392500006,
+      "lng": 114.20047592000009,
+      "lineMembership": [
+        "ISL",
+        "TKL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "NTK",
+      "nameZh": "牛頭角",
+      "nameEn": "Ngau Tau Kok",
+      "name": "牛頭角 Ngau Tau Kok",
+      "lat": 22.315501950000055,
+      "lng": 114.2189221000001,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "KWUN TONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "OCP",
+      "nameZh": "海洋公園",
+      "nameEn": "Ocean Park",
+      "name": "海洋公園 Ocean Park",
+      "lat": 22.248594415000042,
+      "lng": 114.17437727500004,
+      "lineMembership": [
+        "SIL"
+      ],
+      "district": "SOUTHERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "OLY",
+      "nameZh": "奧運",
+      "nameEn": "Olympic",
+      "name": "奧運 Olympic",
+      "lat": 22.317803595000072,
+      "lng": 114.16018304500005,
+      "lineMembership": [
+        "TCL"
+      ],
+      "district": "YAU TSIM MONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "POA",
+      "nameZh": "寶琳",
+      "nameEn": "Po Lam",
+      "name": "寶琳 Po Lam",
+      "lat": 22.322717410000052,
+      "lng": 114.25776386000007,
+      "lineMembership": [
+        "TKL"
+      ],
+      "district": "SAI KUNG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "PRE",
+      "nameZh": "太子",
+      "nameEn": "Prince Edward",
+      "name": "太子 Prince Edward",
+      "lat": 22.32465736000003,
+      "lng": 114.16834316,
+      "lineMembership": [
+        "KTL",
+        "TWL"
+      ],
+      "district": "YAU TSIM MONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "QUB",
+      "nameZh": "鰂魚涌",
+      "nameEn": "Quarry Bay",
+      "name": "鰂魚涌 Quarry Bay",
+      "lat": 22.28877447000005,
+      "lng": 114.20894645500005,
+      "lineMembership": [
+        "ISL",
+        "TKL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "RAC",
+      "nameZh": "馬場",
+      "nameEn": "Racecourse Station",
+      "name": "馬場 Racecourse Station",
+      "lat": 22.400294210000027,
+      "lng": 114.20325791000005,
+      "lineMembership": [],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SHM",
+      "nameZh": "石門",
+      "nameEn": "Shek Mun",
+      "name": "石門 Shek Mun",
+      "lat": 22.387673860000064,
+      "lng": 114.20826611000007,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SHS",
+      "nameZh": "上水",
+      "nameEn": "Sheung Shui",
+      "name": "上水 Sheung Shui",
+      "lat": 22.501382560000025,
+      "lng": 114.12785846000003,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "NORTH DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SHT",
+      "nameZh": "沙田",
+      "nameEn": "Sha Tin",
+      "name": "沙田 Sha Tin",
+      "lat": 22.382463560000048,
+      "lng": 114.18736211000004,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SHW",
+      "nameZh": "上環",
+      "nameEn": "Sheung Wan",
+      "name": "上環 Sheung Wan",
+      "lat": 22.286854935000065,
+      "lng": 114.15150007500006,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "CENTRAL & WESTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SIH",
+      "nameZh": "兆康",
+      "nameEn": "Siu Hong",
+      "name": "兆康 Siu Hong",
+      "lat": 22.412099110000042,
+      "lng": 113.97872616000006,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "TUEN MUN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SKM",
+      "nameZh": "石硤尾",
+      "nameEn": "Shek Kip Mei",
+      "name": "石硤尾 Shek Kip Mei",
+      "lat": 22.33182671000003,
+      "lng": 114.1688489600001,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "SHAM SHUI PO DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SKW",
+      "nameZh": "筲箕灣",
+      "nameEn": "Shau Kei Wan",
+      "name": "筲箕灣 Shau Kei Wan",
+      "lat": 22.27954875000006,
+      "lng": 114.22906640000008,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SOH",
+      "nameZh": "海怡半島",
+      "nameEn": "South Horizons",
+      "name": "海怡半島 South Horizons",
+      "lat": 22.242483195000062,
+      "lng": 114.14903235000003,
+      "lineMembership": [
+        "SIL"
+      ],
+      "district": "SOUTHERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SSP",
+      "nameZh": "深水埗",
+      "nameEn": "Sham Shui Po",
+      "name": "深水埗 Sham Shui Po",
+      "lat": 22.330791600000055,
+      "lng": 114.16228110000009,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "SHAM SHUI PO DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "STW",
+      "nameZh": "沙田圍",
+      "nameEn": "Sha Tin Wai",
+      "name": "沙田圍 Sha Tin Wai",
+      "lat": 22.37703333500005,
+      "lng": 114.19499195500003,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SUN",
+      "nameZh": "欣澳",
+      "nameEn": "Sunny Bay",
+      "name": "欣澳 Sunny Bay",
+      "lat": 22.33188996000007,
+      "lng": 114.02894721000007,
+      "lineMembership": [
+        "DRL",
+        "TCL"
+      ],
+      "district": "TSUEN WAN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SUW",
+      "nameZh": "宋皇臺",
+      "nameEn": "Sung Wong Toi",
+      "name": "宋皇臺 Sung Wong Toi",
+      "lat": 22.32689543500007,
+      "lng": 114.19120238500005,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "KOWLOON CITY DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SWH",
+      "nameZh": "西灣河",
+      "nameEn": "Sai Wan Ho",
+      "name": "西灣河 Sai Wan Ho",
+      "lat": 22.282006910000035,
+      "lng": 114.22203738500002,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "SYP",
+      "nameZh": "西營盤",
+      "nameEn": "Sai Ying Pun",
+      "name": "西營盤 Sai Ying Pun",
+      "lat": 22.28609156500005,
+      "lng": 114.14308517500001,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "CENTRAL & WESTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TAK",
+      "nameZh": "太古",
+      "nameEn": "Tai Koo",
+      "name": "太古 Tai Koo",
+      "lat": 22.285161620000054,
+      "lng": 114.21621015500006,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "EASTERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TAP",
+      "nameZh": "大埔墟",
+      "nameEn": "Tai Po Market",
+      "name": "大埔墟 Tai Po Market",
+      "lat": 22.44448021000005,
+      "lng": 114.17055771000003,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "TAI PO DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TAW",
+      "nameZh": "大圍",
+      "nameEn": "Tai Wai",
+      "name": "大圍 Tai Wai",
+      "lat": 22.37306491000004,
+      "lng": 114.17836511000002,
+      "lineMembership": [
+        "EAL",
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TIH",
+      "nameZh": "天后",
+      "nameEn": "Tin Hau",
+      "name": "天后 Tin Hau",
+      "lat": 22.28225126500007,
+      "lng": 114.19181094000004,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "WAN CHAI DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TIK",
+      "nameZh": "調景嶺",
+      "nameEn": "Tiu Keng Leng",
+      "name": "調景嶺 Tiu Keng Leng",
+      "lat": 22.30394731000004,
+      "lng": 114.2522649600001,
+      "lineMembership": [
+        "KTL",
+        "TKL"
+      ],
+      "district": "SAI KUNG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TIS",
+      "nameZh": "天水圍",
+      "nameEn": "Tin Shui Wai",
+      "name": "天水圍 Tin Shui Wai",
+      "lat": 22.44803151000005,
+      "lng": 114.00462071000004,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "YUEN LONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TKO",
+      "nameZh": "將軍澳",
+      "nameEn": "Tseung Kwan O",
+      "name": "將軍澳 Tseung Kwan O",
+      "lat": 22.30736556000005,
+      "lng": 114.25989941000006,
+      "lineMembership": [
+        "TKL"
+      ],
+      "district": "SAI KUNG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TKW",
+      "nameZh": "土瓜灣",
+      "nameEn": "To Kwa Wan",
+      "name": "土瓜灣 To Kwa Wan",
+      "lat": 22.316933005000067,
+      "lng": 114.18753232000006,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "KOWLOON CITY DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TSH",
+      "nameZh": "大水坑",
+      "nameEn": "Tai Shui Hang",
+      "name": "大水坑 Tai Shui Hang",
+      "lat": 22.40820744000004,
+      "lng": 114.22259463000006,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TST",
+      "nameZh": "尖沙咀",
+      "nameEn": "Tsim Sha Tsui",
+      "name": "尖沙咀 Tsim Sha Tsui",
+      "lat": 22.297295700000063,
+      "lng": 114.17237172500006,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "Yau Tsim Mong District",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TSW",
+      "nameZh": "荃灣",
+      "nameEn": "Tsuen Wan",
+      "name": "荃灣 Tsuen Wan",
+      "lat": 22.373614610000033,
+      "lng": 114.11782741000007,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "TSUEN WAN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TSY",
+      "nameZh": "青衣",
+      "nameEn": "Tsing Yi",
+      "name": "青衣 Tsing Yi",
+      "lat": 22.358324760000045,
+      "lng": 114.10702886000007,
+      "lineMembership": [
+        "AEL",
+        "TCL"
+      ],
+      "district": "KWAI TSING DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TUC",
+      "nameZh": "東涌",
+      "nameEn": "Tung Chung",
+      "name": "東涌 Tung Chung",
+      "lat": 22.289341660000048,
+      "lng": 113.94152786000006,
+      "lineMembership": [
+        "TCL"
+      ],
+      "district": "ISLANDS DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TUM",
+      "nameZh": "屯門",
+      "nameEn": "Tuen Mun",
+      "name": "屯門 Tuen Mun",
+      "lat": 22.395228510000067,
+      "lng": 113.97316196000008,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "TUEN MUN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TWH",
+      "nameZh": "大窩口",
+      "nameEn": "Tai Wo Hau",
+      "name": "大窩口 Tai Wo Hau",
+      "lat": 22.370817550000055,
+      "lng": 114.12503910000004,
+      "lineMembership": [
+        "TWL"
+      ],
+      "district": "TSUEN WAN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TWO",
+      "nameZh": "太和",
+      "nameEn": "Tai Wo",
+      "name": "太和 Tai Wo",
+      "lat": 22.451057760000054,
+      "lng": 114.16106841000004,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "TAI PO DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "TWW",
+      "nameZh": "荃灣西",
+      "nameEn": "Tsuen Wan West",
+      "name": "荃灣西 Tsuen Wan West",
+      "lat": 22.368066510000034,
+      "lng": 114.1099668600001,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "TSUEN WAN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "UNI",
+      "nameZh": "大學",
+      "nameEn": "University",
+      "name": "大學 University",
+      "lat": 22.413623810000047,
+      "lng": 114.21032526000005,
+      "lineMembership": [
+        "EAL"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "WAC",
+      "nameZh": "灣仔",
+      "nameEn": "Wan Chai",
+      "name": "灣仔 Wan Chai",
+      "lat": 22.277236925000068,
+      "lng": 114.1729163550001,
+      "lineMembership": [
+        "ISL"
+      ],
+      "district": "WAN CHAI DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "WCH",
+      "nameZh": "黃竹坑",
+      "nameEn": "Wong Chuk Hang",
+      "name": "黃竹坑 Wong Chuk Hang",
+      "lat": 22.248241380000053,
+      "lng": 114.16757552500002,
+      "lineMembership": [
+        "SIL"
+      ],
+      "district": "SOUTHERN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "WHA",
+      "nameZh": "黃埔",
+      "nameEn": "Whampoa",
+      "name": "黃埔 Whampoa",
+      "lat": 22.304804310000065,
+      "lng": 114.19018486000004,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "KOWLOON CITY DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "WKS",
+      "nameZh": "烏溪沙",
+      "nameEn": "Wu Kai Sha",
+      "name": "烏溪沙 Wu Kai Sha",
+      "lat": 22.429145910000045,
+      "lng": 114.24393591000006,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "SHA TIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "WTS",
+      "nameZh": "黃大仙",
+      "nameEn": "Wong Tai Sin",
+      "name": "黃大仙 Wong Tai Sin",
+      "lat": 22.341625460000046,
+      "lng": 114.19408556000002,
+      "lineMembership": [
+        "KTL"
+      ],
+      "district": "WONG TAI SIN DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "YAT",
+      "nameZh": "油塘",
+      "nameEn": "Yau Tong",
+      "name": "油塘 Yau Tong",
+      "lat": 22.29781424500004,
+      "lng": 114.23716699000005,
+      "lineMembership": [
+        "KTL",
+        "TKL"
+      ],
+      "district": "KWUN TONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "YMT",
+      "nameZh": "油麻地",
+      "nameEn": "Yau Ma Tei",
+      "name": "油麻地 Yau Ma Tei",
+      "lat": 22.312768960000056,
+      "lng": 114.17059231000007,
+      "lineMembership": [
+        "KTL",
+        "TWL"
+      ],
+      "district": "YAU TSIM MONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    },
+    {
+      "code": "YUL",
+      "nameZh": "元朗",
+      "nameEn": "Yuen Long",
+      "name": "元朗 Yuen Long",
+      "lat": 22.446250760000055,
+      "lng": 114.03530996000006,
+      "lineMembership": [
+        "TML"
+      ],
+      "district": "YUEN LONG DISTRICT",
+      "source": "MTR official master workbook; Stations_Master"
+    }
+  ],
+  "lines": [
+    {
+      "code": "AEL",
+      "name": "AEL",
+      "stations": [
+        "AWE",
+        "AIR",
+        "TSY",
+        "KOW",
+        "HOK"
+      ],
+      "stationCount": 5
+    },
+    {
+      "code": "DRL",
+      "name": "DRL",
+      "stations": [
+        "SUN",
+        "DIS"
+      ],
+      "stationCount": 2
+    },
+    {
+      "code": "EAL",
+      "name": "EAL",
+      "stations": [
+        "LOW",
+        "SHS",
+        "FAN",
+        "TWO",
+        "TAP",
+        "UNI",
+        "FOT",
+        "SHT",
+        "TAW",
+        "KOT",
+        "MKK",
+        "HUH",
+        "EXC",
+        "ADM"
+      ],
+      "stationCount": 15
+    },
+    {
+      "code": "ISL",
+      "name": "ISL",
+      "stations": [
+        "CHW",
+        "HFC",
+        "SKW",
+        "SWH",
+        "TAK",
+        "QUB",
+        "NOP",
+        "FOH",
+        "TIH",
+        "CAB",
+        "WAC",
+        "ADM",
+        "CEN",
+        "SHW",
+        "SYP",
+        "HKU",
+        "KET"
+      ],
+      "stationCount": 17
+    },
+    {
+      "code": "KTL",
+      "name": "KTL",
+      "stations": [
+        "TIK",
+        "YAT",
+        "LAT",
+        "KWT",
+        "NTK",
+        "KOB",
+        "CHH",
+        "DIH",
+        "WTS",
+        "LOF",
+        "KOT",
+        "SKM",
+        "PRE",
+        "MOK",
+        "YMT",
+        "HOM",
+        "WHA"
+      ],
+      "stationCount": 17
+    },
+    {
+      "code": "SIL",
+      "name": "SIL",
+      "stations": [
+        "ADM",
+        "OCP",
+        "WCH",
+        "LET",
+        "SOH"
+      ],
+      "stationCount": 5
+    },
+    {
+      "code": "TCL",
+      "name": "TCL",
+      "stations": [
+        "TUC",
+        "SUN",
+        "TSY",
+        "LAK",
+        "NAC",
+        "OLY",
+        "KOW",
+        "HOK"
+      ],
+      "stationCount": 8
+    },
+    {
+      "code": "TKL",
+      "name": "TKL",
+      "stations": [
+        "POA",
+        "HAH",
+        "TKO",
+        "TIK",
+        "YAT",
+        "QUB",
+        "NOP"
+      ],
+      "stationCount": 8
+    },
+    {
+      "code": "TML",
+      "name": "TML",
+      "stations": [
+        "WKS",
+        "MOS",
+        "HEO",
+        "TSH",
+        "SHM",
+        "CIO",
+        "STW",
+        "CKT",
+        "TAW",
+        "HIK",
+        "DIH",
+        "KAT",
+        "SUW",
+        "TKW",
+        "HOM",
+        "HUH",
+        "ETS",
+        "AUS",
+        "NAC",
+        "MEF",
+        "TWW",
+        "KSR",
+        "YUL",
+        "LOP",
+        "TIS",
+        "SIH",
+        "TUM"
+      ],
+      "stationCount": 27
+    },
+    {
+      "code": "TWL",
+      "name": "TWL",
+      "stations": [
+        "TSW",
+        "TWH",
+        "KWH",
+        "KWF",
+        "LAK",
+        "MEF",
+        "LCK",
+        "CSW",
+        "SSP",
+        "PRE",
+        "MOK",
+        "YMT",
+        "JOR",
+        "TST",
+        "ADM",
+        "CEN"
+      ],
+      "stationCount": 16
+    }
+  ],
+  "edges": [
+    {
+      "id": "AEL:AIR:AWE",
+      "line": "AEL",
+      "from": "AWE",
+      "to": "AIR",
+      "distance": 877,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "AEL:AIR:TSY",
+      "line": "AEL",
+      "from": "AIR",
+      "to": "TSY",
+      "distance": 18165,
+      "minutes": 29.7,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "AEL:HOK:KOW",
+      "line": "AEL",
+      "from": "KOW",
+      "to": "HOK",
+      "distance": 2265,
+      "minutes": 5.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "AEL:KOW:TSY",
+      "line": "AEL",
+      "from": "TSY",
+      "to": "KOW",
+      "distance": 8191,
+      "minutes": 14.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "DRL:DIS:SUN",
+      "line": "DRL",
+      "from": "SUN",
+      "to": "DIS",
+      "distance": 2462,
+      "minutes": 5.6,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:ADM:EXC",
+      "line": "EAL",
+      "from": "EXC",
+      "to": "ADM",
+      "distance": 1016,
+      "minutes": 3.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:EXC:HUH",
+      "line": "EAL",
+      "from": "HUH",
+      "to": "EXC",
+      "distance": 2414,
+      "minutes": 5.5,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:FAN:SHS",
+      "line": "EAL",
+      "from": "SHS",
+      "to": "FAN",
+      "distance": 1512,
+      "minutes": 4.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:FAN:TWO",
+      "line": "EAL",
+      "from": "FAN",
+      "to": "TWO",
+      "distance": 5115,
+      "minutes": 9.7,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:FOT:SHT",
+      "line": "EAL",
+      "from": "FOT",
+      "to": "SHT",
+      "distance": 1847,
+      "minutes": 4.6,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:FOT:UNI",
+      "line": "EAL",
+      "from": "UNI",
+      "to": "FOT",
+      "distance": 2351,
+      "minutes": 5.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:HUH:MKK",
+      "line": "EAL",
+      "from": "MKK",
+      "to": "HUH",
+      "distance": 2384,
+      "minutes": 5.5,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:KOT:MKK",
+      "line": "EAL",
+      "from": "KOT",
+      "to": "MKK",
+      "distance": 1712,
+      "minutes": 4.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:KOT:TAW",
+      "line": "EAL",
+      "from": "TAW",
+      "to": "KOT",
+      "distance": 4001,
+      "minutes": 8.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:LMC:SHS",
+      "line": "EAL",
+      "from": "LMC",
+      "to": "SHS",
+      "distance": 6564,
+      "minutes": 11.9,
+      "sourceDirection": "LMC-DT"
+    },
+    {
+      "id": "EAL:LOW:SHS",
+      "line": "EAL",
+      "from": "LOW",
+      "to": "SHS",
+      "distance": 3304,
+      "minutes": 6.9,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:SHT:TAW",
+      "line": "EAL",
+      "from": "SHT",
+      "to": "TAW",
+      "distance": 1396,
+      "minutes": 3.9,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:TAP:TWO",
+      "line": "EAL",
+      "from": "TWO",
+      "to": "TAP",
+      "distance": 1219,
+      "minutes": 3.7,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "EAL:TAP:UNI",
+      "line": "EAL",
+      "from": "TAP",
+      "to": "UNI",
+      "distance": 5337,
+      "minutes": 10.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:ADM:CEN",
+      "line": "ISL",
+      "from": "ADM",
+      "to": "CEN",
+      "distance": 793,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:ADM:WAC",
+      "line": "ISL",
+      "from": "WAC",
+      "to": "ADM",
+      "distance": 727,
+      "minutes": 2.9,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:CAB:TIH",
+      "line": "ISL",
+      "from": "TIH",
+      "to": "CAB",
+      "distance": 869,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:CAB:WAC",
+      "line": "ISL",
+      "from": "CAB",
+      "to": "WAC",
+      "distance": 1157,
+      "minutes": 3.6,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:CEN:SHW",
+      "line": "ISL",
+      "from": "CEN",
+      "to": "SHW",
+      "distance": 969,
+      "minutes": 3.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:CHW:HFC",
+      "line": "ISL",
+      "from": "CHW",
+      "to": "HFC",
+      "distance": 1353,
+      "minutes": 3.9,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:FOH:NOP",
+      "line": "ISL",
+      "from": "NOP",
+      "to": "FOH",
+      "distance": 791,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:FOH:TIH",
+      "line": "ISL",
+      "from": "FOH",
+      "to": "TIH",
+      "distance": 638,
+      "minutes": 2.8,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:HFC:SKW",
+      "line": "ISL",
+      "from": "HFC",
+      "to": "SKW",
+      "distance": 1137,
+      "minutes": 3.5,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:HKU:KET",
+      "line": "ISL",
+      "from": "HKU",
+      "to": "KET",
+      "distance": 730,
+      "minutes": 2.9,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:HKU:SYP",
+      "line": "ISL",
+      "from": "SYP",
+      "to": "HKU",
+      "distance": 875,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:NOP:QUB",
+      "line": "ISL",
+      "from": "QUB",
+      "to": "NOP",
+      "distance": 911,
+      "minutes": 3.2,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:QUB:TAK",
+      "line": "ISL",
+      "from": "TAK",
+      "to": "QUB",
+      "distance": 848,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:SHW:SYP",
+      "line": "ISL",
+      "from": "SHW",
+      "to": "SYP",
+      "distance": 870,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:SKW:SWH",
+      "line": "ISL",
+      "from": "SKW",
+      "to": "SWH",
+      "distance": 773,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "ISL:SWH:TAK",
+      "line": "ISL",
+      "from": "SWH",
+      "to": "TAK",
+      "distance": 695,
+      "minutes": 2.9,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:CHH:DIH",
+      "line": "KTL",
+      "from": "CHH",
+      "to": "DIH",
+      "distance": 950,
+      "minutes": 3.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:CHH:KOB",
+      "line": "KTL",
+      "from": "KOB",
+      "to": "CHH",
+      "distance": 1382,
+      "minutes": 3.9,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:DIH:WTS",
+      "line": "KTL",
+      "from": "DIH",
+      "to": "WTS",
+      "distance": 778,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:HOM:WHA",
+      "line": "KTL",
+      "from": "HOM",
+      "to": "WHA",
+      "distance": 966,
+      "minutes": 3.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:HOM:YMT",
+      "line": "KTL",
+      "from": "YMT",
+      "to": "HOM",
+      "distance": 1280,
+      "minutes": 3.8,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:KOB:NTK",
+      "line": "KTL",
+      "from": "NTK",
+      "to": "KOB",
+      "distance": 1013,
+      "minutes": 3.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:KOT:LOF",
+      "line": "KTL",
+      "from": "LOF",
+      "to": "KOT",
+      "distance": 1040,
+      "minutes": 3.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:KOT:SKM",
+      "line": "KTL",
+      "from": "KOT",
+      "to": "SKM",
+      "distance": 997,
+      "minutes": 3.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:KWT:LAT",
+      "line": "KTL",
+      "from": "LAT",
+      "to": "KWT",
+      "distance": 884,
+      "minutes": 3.2,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:KWT:NTK",
+      "line": "KTL",
+      "from": "KWT",
+      "to": "NTK",
+      "distance": 871,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:LAT:YAT",
+      "line": "KTL",
+      "from": "YAT",
+      "to": "LAT",
+      "distance": 1098,
+      "minutes": 3.5,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:LOF:WTS",
+      "line": "KTL",
+      "from": "WTS",
+      "to": "LOF",
+      "distance": 862,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:MOK:PRE",
+      "line": "KTL",
+      "from": "PRE",
+      "to": "MOK",
+      "distance": 587,
+      "minutes": 2.7,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:MOK:YMT",
+      "line": "KTL",
+      "from": "MOK",
+      "to": "YMT",
+      "distance": 755,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:PRE:SKM",
+      "line": "KTL",
+      "from": "SKM",
+      "to": "PRE",
+      "distance": 799,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "KTL:TIK:YAT",
+      "line": "KTL",
+      "from": "TIK",
+      "to": "YAT",
+      "distance": 1696,
+      "minutes": 4.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "SIL:ADM:OCP",
+      "line": "SIL",
+      "from": "ADM",
+      "to": "OCP",
+      "distance": 3424,
+      "minutes": 7.1,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "SIL:LET:SOH",
+      "line": "SIL",
+      "from": "LET",
+      "to": "SOH",
+      "distance": 719,
+      "minutes": 2.9,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "SIL:LET:WCH",
+      "line": "SIL",
+      "from": "WCH",
+      "to": "LET",
+      "distance": 1367,
+      "minutes": 3.9,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "SIL:OCP:WCH",
+      "line": "SIL",
+      "from": "OCP",
+      "to": "WCH",
+      "distance": 701,
+      "minutes": 2.9,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TCL:HOK:KOW",
+      "line": "TCL",
+      "from": "KOW",
+      "to": "HOK",
+      "distance": 2265,
+      "minutes": 5.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TCL:KOW:OLY",
+      "line": "TCL",
+      "from": "OLY",
+      "to": "KOW",
+      "distance": 1456,
+      "minutes": 4.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TCL:LAK:NAC",
+      "line": "TCL",
+      "from": "LAK",
+      "to": "NAC",
+      "distance": 3737,
+      "minutes": 7.5,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TCL:LAK:TSY",
+      "line": "TCL",
+      "from": "TSY",
+      "to": "LAK",
+      "distance": 2260,
+      "minutes": 5.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TCL:NAC:OLY",
+      "line": "TCL",
+      "from": "NAC",
+      "to": "OLY",
+      "distance": 1171,
+      "minutes": 3.6,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TCL:SUN:TSY",
+      "line": "TCL",
+      "from": "SUN",
+      "to": "TSY",
+      "distance": 8551,
+      "minutes": 15.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TCL:SUN:TUC",
+      "line": "TCL",
+      "from": "TUC",
+      "to": "SUN",
+      "distance": 10161,
+      "minutes": 17.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TKL:HAH:POA",
+      "line": "TKL",
+      "from": "POA",
+      "to": "HAH",
+      "distance": 1010,
+      "minutes": 3.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TKL:HAH:TKO",
+      "line": "TKL",
+      "from": "HAH",
+      "to": "TKO",
+      "distance": 1038,
+      "minutes": 3.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TKL:LHP:TKO",
+      "line": "TKL",
+      "from": "LHP",
+      "to": "TKO",
+      "distance": 1598,
+      "minutes": 4.3,
+      "sourceDirection": "TKS-DT"
+    },
+    {
+      "id": "TKL:NOP:QUB",
+      "line": "TKL",
+      "from": "QUB",
+      "to": "NOP",
+      "distance": 911,
+      "minutes": 3.2,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TKL:QUB:YAT",
+      "line": "TKL",
+      "from": "YAT",
+      "to": "QUB",
+      "distance": 3073,
+      "minutes": 6.5,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TKL:TIK:TKO",
+      "line": "TKL",
+      "from": "TKO",
+      "to": "TIK",
+      "distance": 873,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TKL:TIK:YAT",
+      "line": "TKL",
+      "from": "TIK",
+      "to": "YAT",
+      "distance": 1696,
+      "minutes": 4.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TML:AUS:ETS",
+      "line": "TML",
+      "from": "ETS",
+      "to": "AUS",
+      "distance": 1186,
+      "minutes": 3.6,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:AUS:NAC",
+      "line": "TML",
+      "from": "AUS",
+      "to": "NAC",
+      "distance": 2784,
+      "minutes": 6.1,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:CIO:SHM",
+      "line": "TML",
+      "from": "SHM",
+      "to": "CIO",
+      "distance": 725,
+      "minutes": 2.9,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:CIO:STW",
+      "line": "TML",
+      "from": "CIO",
+      "to": "STW",
+      "distance": 1090,
+      "minutes": 3.5,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:CKT:STW",
+      "line": "TML",
+      "from": "STW",
+      "to": "CKT",
+      "distance": 941,
+      "minutes": 3.2,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:CKT:TAW",
+      "line": "TML",
+      "from": "CKT",
+      "to": "TAW",
+      "distance": 825,
+      "minutes": 3.1,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:DIH:HIK",
+      "line": "TML",
+      "from": "HIK",
+      "to": "DIH",
+      "distance": 4131,
+      "minutes": 8.2,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:DIH:KAT",
+      "line": "TML",
+      "from": "DIH",
+      "to": "KAT",
+      "distance": 1057,
+      "minutes": 3.4,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:ETS:HUH",
+      "line": "TML",
+      "from": "HUH",
+      "to": "ETS",
+      "distance": 1069,
+      "minutes": 3.4,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:HEO:MOS",
+      "line": "TML",
+      "from": "MOS",
+      "to": "HEO",
+      "distance": 1010,
+      "minutes": 3.4,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:HEO:TSH",
+      "line": "TML",
+      "from": "HEO",
+      "to": "TSH",
+      "distance": 1083,
+      "minutes": 3.5,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:HIK:TAW",
+      "line": "TML",
+      "from": "TAW",
+      "to": "HIK",
+      "distance": 1281,
+      "minutes": 3.8,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:HOM:HUH",
+      "line": "TML",
+      "from": "HOM",
+      "to": "HUH",
+      "distance": 848,
+      "minutes": 3.1,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:HOM:TKW",
+      "line": "TML",
+      "from": "TKW",
+      "to": "HOM",
+      "distance": 916,
+      "minutes": 3.2,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:KAT:SUW",
+      "line": "TML",
+      "from": "KAT",
+      "to": "SUW",
+      "distance": 943,
+      "minutes": 3.3,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:KSR:TWW",
+      "line": "TML",
+      "from": "TWW",
+      "to": "KSR",
+      "distance": 8829,
+      "minutes": 15.4,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:KSR:YUL",
+      "line": "TML",
+      "from": "KSR",
+      "to": "YUL",
+      "distance": 3157,
+      "minutes": 6.7,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:LOP:TIS",
+      "line": "TML",
+      "from": "LOP",
+      "to": "TIS",
+      "distance": 2138,
+      "minutes": 5.1,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:LOP:YUL",
+      "line": "TML",
+      "from": "YUL",
+      "to": "LOP",
+      "distance": 1030,
+      "minutes": 3.4,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:MEF:NAC",
+      "line": "TML",
+      "from": "NAC",
+      "to": "MEF",
+      "distance": 2073,
+      "minutes": 5.0,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:MEF:TWW",
+      "line": "TML",
+      "from": "MEF",
+      "to": "TWW",
+      "distance": 4401,
+      "minutes": 8.6,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:MOS:WKS",
+      "line": "TML",
+      "from": "WKS",
+      "to": "MOS",
+      "distance": 1356,
+      "minutes": 3.9,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:SHM:TSH",
+      "line": "TML",
+      "from": "TSH",
+      "to": "SHM",
+      "distance": 2717,
+      "minutes": 6.0,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:SIH:TIS",
+      "line": "TML",
+      "from": "TIS",
+      "to": "SIH",
+      "distance": 4801,
+      "minutes": 9.2,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:SIH:TUM",
+      "line": "TML",
+      "from": "SIH",
+      "to": "TUM",
+      "distance": 1961,
+      "minutes": 4.8,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TML:SUW:TKW",
+      "line": "TML",
+      "from": "SUW",
+      "to": "TKW",
+      "distance": 1170,
+      "minutes": 3.6,
+      "sourceDirection": "UT"
+    },
+    {
+      "id": "TWL:ADM:CEN",
+      "line": "TWL",
+      "from": "ADM",
+      "to": "CEN",
+      "distance": 793,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:ADM:TST",
+      "line": "TWL",
+      "from": "TST",
+      "to": "ADM",
+      "distance": 2204,
+      "minutes": 5.2,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:CSW:LCK",
+      "line": "TWL",
+      "from": "LCK",
+      "to": "CSW",
+      "distance": 862,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:CSW:SSP",
+      "line": "TWL",
+      "from": "CSW",
+      "to": "SSP",
+      "distance": 795,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:JOR:TST",
+      "line": "TWL",
+      "from": "JOR",
+      "to": "TST",
+      "distance": 846,
+      "minutes": 3.1,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:JOR:YMT",
+      "line": "TWL",
+      "from": "YMT",
+      "to": "JOR",
+      "distance": 885,
+      "minutes": 3.2,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:KWF:KWH",
+      "line": "TWL",
+      "from": "KWH",
+      "to": "KWF",
+      "distance": 792,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:KWF:LAK",
+      "line": "TWL",
+      "from": "KWF",
+      "to": "LAK",
+      "distance": 963,
+      "minutes": 3.3,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:KWH:TWH",
+      "line": "TWL",
+      "from": "TWH",
+      "to": "KWH",
+      "distance": 1070,
+      "minutes": 3.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:LAK:MEF",
+      "line": "TWL",
+      "from": "LAK",
+      "to": "MEF",
+      "distance": 1664,
+      "minutes": 4.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:LCK:MEF",
+      "line": "TWL",
+      "from": "MEF",
+      "to": "LCK",
+      "distance": 1036,
+      "minutes": 3.4,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:MOK:PRE",
+      "line": "TWL",
+      "from": "PRE",
+      "to": "MOK",
+      "distance": 587,
+      "minutes": 2.7,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:MOK:YMT",
+      "line": "TWL",
+      "from": "MOK",
+      "to": "YMT",
+      "distance": 755,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:PRE:SSP",
+      "line": "TWL",
+      "from": "SSP",
+      "to": "PRE",
+      "distance": 924,
+      "minutes": 3.2,
+      "sourceDirection": "DT"
+    },
+    {
+      "id": "TWL:TSW:TWH",
+      "line": "TWL",
+      "from": "TSW",
+      "to": "TWH",
+      "distance": 804,
+      "minutes": 3.0,
+      "sourceDirection": "DT"
+    }
+  ]
+}
