@@ -1523,11 +1523,16 @@ button svg {
   display: none;
 }
 
-.location-overlay div {
+.location-overlay > div {
   display: grid;
   gap: 12px;
   width: min(440px, calc(100vw - 48px));
   padding: 28px;
+}
+
+.location-overlay-copy {
+  display: grid;
+  gap: 4px;
 }
 
 .location-overlay strong {
