@@ -14,12 +14,6 @@ Mapable HK 是純靜態前端應用，沒有項目自有後端或賬號系統。
 
 > 重要：本項目不是政府、公共交通營辦商、醫療機構或緊急服務的官方產品。路線、無障礙設施、班次、車費及設施狀態均可能變化，出發前應向相關機構核實。
 
-## English summary
-
-Mapable HK is an accessibility-first, browser-based journey planner for Hong Kong. It combines walking, bus, MTR, Light Rail and mixed-mode transfers, then ranks route candidates using travel time, walking effort, transfers, fare, accessibility risks and data confidence.
-
-The interface supports Traditional Chinese, Simplified Chinese and English, with independent colour-vision and high-contrast display modes. The published application is a static GitHub Pages site with no project-operated backend.
-
 ## 主要功能
 
 ### 多模式路線規劃
