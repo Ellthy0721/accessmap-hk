@@ -1,50 +1,50 @@
 # Mapable HK Reference
 
-本文件记录编码过程中实际用到或接入过的数据资源、开放平台、网页资料和外部代码来源。后续新增数据/API/资料时，要继续补到这里。
+本文件記錄編碼過程中實際用到或接入過的數據資源、開放平台、網頁資料和外部代碼來源。後續新增數據/API/資料時，要繼續補到這裏。
 
-## 地图与底图
+## 地圖與底圖
 
-| 来源 | 链接 | 用途 |
+| 來源 | 鏈接 | 用途 |
 | --- | --- | --- |
-| GeoInfo Map, Lands Department, HKSAR Government | https://api.hkmapservice.gov.hk/ | 新版地图底图和繁体中文地图标注。代码中通过 Leaflet tile layer 加载。 |
-| Leaflet | https://leafletjs.com/ | 前端互动地图、缩放控件、marker、polyline 路线显示。 |
-| Google Fonts - Noto Sans HK / Noto Sans TC / Noto Sans SC / Noto Sans | https://fonts.google.com/noto | 页面全局字体，覆盖繁体、简体和英文界面文字；香港及繁体字形优先，Noto Sans SC 为简体缺字提供同系列、同字重的回退。 |
+| GeoInfo Map, Lands Department, HKSAR Government | https://api.hkmapservice.gov.hk/ | 新版地圖底圖和繁體中文地圖標註。代碼中通過 Leaflet tile layer 加載。 |
+| Leaflet | https://leafletjs.com/ | 前端互動地圖、縮放控件、marker、polyline 路線顯示。 |
+| Google Fonts - Noto Sans HK / Noto Sans TC / Noto Sans SC / Noto Sans | https://fonts.google.com/noto | 頁面全局字體，覆蓋繁體、簡體和英文界面文字；香港及繁體字形優先，Noto Sans SC 為簡體缺字提供同系列、同字重的回退。 |
 
-## 搜索与地理编码
+## 搜索與地理編碼
 
-| 来源 | 链接 | 用途 |
+| 來源 | 鏈接 | 用途 |
 | --- | --- | --- |
 | ArcGIS World Geocoding Service | https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates | Runtime address-search fallback and build-time coordinate fallback for FHS venues not matched by the local index; only Hong Kong results above the confidence threshold are published. |
-| OpenStreetMap Nominatim | https://nominatim.openstreetmap.org/ | 香港地名和地址搜索兜底，限制 `countrycodes=hk` 和香港范围。 |
-| Photon Geocoder | https://photon.komoot.io/ | OpenStreetMap 搜索补充来源，用于 POI / 街道候选。 |
+| OpenStreetMap Nominatim | https://nominatim.openstreetmap.org/ | 香港地名和地址搜索兜底，限制 `countrycodes=hk` 和香港範圍。 |
+| Photon Geocoder | https://photon.komoot.io/ | OpenStreetMap 搜索補充來源，用於 POI / 街道候選。 |
 
-## 交通与无障碍数据
+## 交通與無障礙數據
 
-| 来源 | 链接 | 用途 |
+| 來源 | 鏈接 | 用途 |
 | --- | --- | --- |
-| CSDI / data.gov.hk 香港开放数据 | https://portal.csdi.gov.hk/ 与 https://data.gov.hk/ | 旧版和后续新版迁移的数据来源，包括设施、无障碍地点、行人网络、洗手间、公共设施等。 |
-| CSDI 3D Pedestrian Network | https://portal.csdi.gov.hk/ | 步行 route tiles 的来源；后续迁移到新版 `WalkingRouter`。 |
-| MTR 官方 / CSDI 相关数据 | https://www.mtr.com.hk/ 与 CSDI | 港铁站、出口、升降机、斜道、轮椅洗手间、协助点等资料来源。 |
-| KMB / LWB Open Data API | https://data.etabus.gov.hk/ | 巴士站、路线、ETA 和 KMB 接驳路线来源；本阶段确认路线接口可访问，但不含车费字段。 |
-| Citybus Real-time Arrival Data API | https://rt.data.gov.hk/v2/transport/citybus/ | 城巴路线、站序、站点与 ETA 的在线开放接口；本阶段用 route、route-stop、stop endpoint 生成 `app/data/transit.citybus.json` / `docs/data/transit.citybus.json`，用于 Citybus 真实站序巴士候选。 |
-| GMB / Transport Department 开放数据 | https://data.gov.hk/ | 小巴总站和接驳点数据来源。 |
-| AFCD / HAD / CSDI 开放数据 | https://data.gov.hk/ 与 CSDI | 无障碍场地、公共洗手间和社区设施数据来源。 |
+| CSDI / data.gov.hk 香港開放數據 | https://portal.csdi.gov.hk/ 與 https://data.gov.hk/ | 舊版和後續新版遷移的數據來源，包括設施、無障礙地點、行人網絡、洗手間、公共設施等。 |
+| CSDI 3D Pedestrian Network | https://portal.csdi.gov.hk/ | 步行 route tiles 的來源；後續遷移到新版 `WalkingRouter`。 |
+| MTR 官方 / CSDI 相關數據 | https://www.mtr.com.hk/ 與 CSDI | 港鐵站、出口、升降機、斜道、輪椅洗手間、協助點等資料來源。 |
+| KMB / LWB Open Data API | https://data.etabus.gov.hk/ | 巴士站、路線、ETA 和 KMB 接駁路線來源；本階段確認路線接口可訪問，但不含車費字段。 |
+| Citybus Real-time Arrival Data API | https://rt.data.gov.hk/v2/transport/citybus/ | 城巴路線、站序、站點與 ETA 的在線開放接口；本階段用 route、route-stop、stop endpoint 生成 `app/data/transit.citybus.json` / `docs/data/transit.citybus.json`，用於 Citybus 真實站序巴士候選。 |
+| GMB / Transport Department 開放數據 | https://data.gov.hk/ | 小巴總站和接駁點數據來源。 |
+| AFCD / HAD / CSDI 開放數據 | https://data.gov.hk/ 與 CSDI | 無障礙場地、公共洗手間和社區設施數據來源。 |
 
-## 本地项目资料
+## 本地項目資料
 
-| 来源 | 位置 | 用途 |
+| 來源 | 位置 | 用途 |
 | --- | --- | --- |
-| 旧版可运行项目 | `#3 - 可用版本/` | 保留作为 legacy/reference；复用成熟路线、MTR、KMB、ETA、CSDI route tile 思路，不复用旧 UI。 |
-| GitHub raw content fallback | `https://raw.githubusercontent.com/Ellthy0721/accessmap-hk/main/%233%20-%20可用版本/data/` | 新版 Pages 运行时按需读取 legacy CSDI route tiles，避免在 `docs/` 重复提交一份巨量 tiles。 |
-| 数据说明 | `数据集.md` | 记录已接入数据集、数量和整理状态。 |
-| 功能说明 | `功能.md` | 记录不同无障碍群体方向和功能需求。 |
-| 新版需求和架构 | `docs-dev/PRD.md`, `docs-dev/ARCHITECTURE.md`, `docs-dev/ROADMAP.md` | 新版产品定位、服务边界、阶段计划。 |
+| 舊版可運行項目 | `#3 - 可用版本/` | 保留作為 legacy/reference；複用成熟路線、MTR、KMB、ETA、CSDI route tile 思路，不復用舊 UI。 |
+| GitHub raw content fallback | `https://raw.githubusercontent.com/Ellthy0721/accessmap-hk/main/%233%20-%20可用版本/data/` | 新版 Pages 運行時按需讀取 legacy CSDI route tiles，避免在 `docs/` 重複提交一份巨量 tiles。 |
+| 數據說明 | `数据集.md` | 記錄已接入數據集、數量和整理狀態。 |
+| 功能說明 | `功能.md` | 記錄不同無障礙羣體方向和功能需求。 |
+| 新版需求和架構 | `docs-dev/PRD.md`, `docs-dev/ARCHITECTURE.md`, `docs-dev/ROADMAP.md` | 新版產品定位、服務邊界、階段計劃。 |
 
-## 外部 GitHub 仓库
+## 外部 GitHub 倉庫
 
-| 仓库 | 用途 |
+| 倉庫 | 用途 |
 | --- | --- |
-| https://github.com/wheelstransit/hongkong-community-gtfs | 查阅香港社区 GTFS 的生成方式、覆盖交通模式、数据归属和 ODbL 许可；本项目没有复制其程序代码，只读取其公开生成的 GTFS feed，并由 app/scripts/build-route-shapes.py 压缩成本地 route-shape 数据。 |
+| https://github.com/wheelstransit/hongkong-community-gtfs | 查閱香港社區 GTFS 的生成方式、覆蓋交通模式、數據歸屬和 ODbL 許可；本項目沒有複製其程序代碼，只讀取其公開生成的 GTFS feed，並由 app/scripts/build-route-shapes.py 壓縮成本地 route-shape 數據。 |
 
 
 ## 2026-07-07 Search Index Update
@@ -108,7 +108,7 @@
 
 | 來源 | 連結 / 位置 | 用途 |
 | --- | --- | --- |
-| Hong Kong Community GTFS hosted feed | https://feed.justusewheels.com/hk.gtfs.zip | 本地 route-shape 与营运时间主资料。读取 routes、trips、shapes、calendar、calendar_dates、frequencies、stop_times 和 attributions，生成 app/data/transit.route-shapes/；目前整理出 1,159 个 provider/route key、2,161 条方向/变体 shape，覆盖九巴、城巴、屿巴、港铁和轻铁。 |
+| Hong Kong Community GTFS hosted feed | https://feed.justusewheels.com/hk.gtfs.zip | 本地 route-shape 與營運時間主資料。讀取 routes、trips、shapes、calendar、calendar_dates、frequencies、stop_times 和 attributions，生成 app/data/transit.route-shapes/；目前整理出 1,159 個 provider/route key、2,161 條方向/變體 shape，覆蓋九巴、城巴、嶼巴、港鐵和輕鐵。 |
 | Hong Kong Community GTFS repository | https://github.com/wheelstransit/hongkong-community-gtfs | 查核 feed 是由 OpenStreetMap 與 DATA.GOV.HK 等開放來源程序化生成，並確認生成資料採 ODbL。只參考資料來源、授權與 feed 入口，沒有複製倉庫程式碼。 |
 | Wheels Router API overview | https://router.justusewheels.com/ | 找到 hosted GTFS 與 route-shape 服務入口，並查核其公開列出的香港交通覆蓋範圍。Mapable HK 運行時不依賴此遠端規劃 API。 |
 | Wheels route-shape service | https://shapes.justusewheels.com/ | 調查可否直接使用遠端 shape 服務；最終選擇將 GTFS shapes.txt 壓縮後存於本地，避免規劃時依賴遠端 API。 |
@@ -122,7 +122,7 @@
 | Wikidata Light Rail Route 705 | https://www.wikidata.org/wiki/Q62127918 | 交叉核對 705 路線的 OpenStreetMap relation ID 6558997 和環線屬性；實際幾何使用其方向 route relation 2941692。 |
 | OSM Public Transport to GeoJSON API documentation | https://openstreetmap.tools/public_transport_geojson/docs | 評估按 relation 下載 route LineString 的方案；因需要逐條 relation ID 且全港覆蓋管理成本高，本階段未作運行時或構建依賴。 |
 | Transport Department Intelligent Road Network Package | https://www.td.gov.hk/en/public_services/intelligent_road_network_package/index.html | 評估官方道路網作巴士站序 map-matching 的備選方案；資料可描述道路方向和轉向限制，但不等於巴士實際營運 route shape，本階段未導入。 |
-| Mapable HK route-shape build output | `app/scripts/build-route-shapes.py`、`app/data/transit.route-shapes/`、`docs/data/transit.route-shapes/` | 将 GTFS shapes、CSDI 城巴官方线形、OSM relation 与 GTFS 时刻表压缩为分桶 polyline 和服务日历 JSON；按公司及路线首字符懒加载。当前整理出 1,253 个路线键和 2,530 条方向/变体 shape，共约 74.0 万个简化点；城巴官方原始约 2,084 万点简化为约 26.5 万点。 |
+| Mapable HK route-shape build output | `app/scripts/build-route-shapes.py`、`app/data/transit.route-shapes/`、`docs/data/transit.route-shapes/` | 將 GTFS shapes、CSDI 城巴官方線形、OSM relation 與 GTFS 時刻表壓縮為分桶 polyline 和服務日曆 JSON；按公司及路線首字符懶加載。當前整理出 1,253 個路線鍵和 2,530 條方向/變體 shape，共約 74.0 萬個簡化點；城巴官方原始約 2,084 萬點簡化為約 26.5 萬點。 |
 
 ## 2026-07-16 Official Citybus Route Geometry
 
@@ -158,17 +158,17 @@
 
 ## 2026-07-10 Service Calendar and Supplemental Bus Relations
 
-| 来源 | 连接 / 位置 | 用途 |
+| 來源 | 連接 / 位置 | 用途 |
 | --- | --- | --- |
-| Hong Kong Community GTFS schedule files | https://feed.justusewheels.com/hk.gtfs.zip | 读取 `calendar.txt`、`calendar_dates.txt`、`frequencies.txt` 和 `stop_times.txt`，把营运星期、特别日期、首末班时段和班次间隔压入本地 route-shape manifest；网页运行时不需要下载原始 GTFS。 |
-| GTFS calendar reference | https://gtfs.org/documentation/schedule/reference/#calendartxt 与 https://gtfs.org/documentation/schedule/reference/#calendar_datestxt | 核对星期掩码、服务起止日期及新增/取消服务日期的正式语义。 |
-| GTFS frequencies and stop times reference | https://gtfs.org/documentation/schedule/reference/#frequenciestxt 与 https://gtfs.org/documentation/schedule/reference/#stop_timestxt | 核对频密班次的起止时间、班距，以及没有 frequencies 记录时的固定开出时间。 |
-| OpenStreetMap Overpass API interpreter | https://overpass-api.de/api/interpreter | 仅在构建审计阶段按香港范围、路线号和公交公司查找缺失巴士 route relation；网页运行时不调用。 |
-| KMB 91R OSM route relations | https://www.openstreetmap.org/relation/6496237 与 https://www.openstreetmap.org/relation/6498056 | 与本地九巴官方站序交叉核对清水湾、彩明方向；补充社区 GTFS 未包含的 91R 本地真实走线。 |
-| Citybus E18 OSM route relation | https://www.openstreetmap.org/relation/20697949 | 与城巴官方 E18 东涌（翔东邨）至北角码头站序核对后，作为本地补充走线。 |
-| Citybus E28 OSM route relation | https://www.openstreetmap.org/relation/20697948 | 与城巴官方 E28 东涌（翔东邨）至将军澳工业邨站序核对后，作为本地补充走线。 |
-| Official real-time arrival APIs | KMB、Citybus、NLB、MTR Next Train、MTR Light Rail endpoints（见本文件 ETA 章节） | 本阶段正式接入最终候选路线：ETA 成功时更新候车时间、总时间和排序；2.8 秒内不可用时回退本地时刻表，避免规划界面长期卡住。 |
-| Supplemental-route validation result | `app/scripts/build-route-shapes.py`、`app/data/transit.route-shapes/manifest.json` | 目前可靠补入 91R、E18、E28。104R、15B、1P、H2、X9、34S、7S、NB2 属特别、季节、观光、墓园或跨境服务且没有足够可靠公开 shape，因此继续从推荐中排除，不以站点折线冒充真实走线。 |
+| Hong Kong Community GTFS schedule files | https://feed.justusewheels.com/hk.gtfs.zip | 讀取 `calendar.txt`、`calendar_dates.txt`、`frequencies.txt` 和 `stop_times.txt`，把營運星期、特別日期、首末班時段和班次間隔壓入本地 route-shape manifest；網頁運行時不需要下載原始 GTFS。 |
+| GTFS calendar reference | https://gtfs.org/documentation/schedule/reference/#calendartxt 與 https://gtfs.org/documentation/schedule/reference/#calendar_datestxt | 核對星期掩碼、服務起止日期及新增/取消服務日期的正式語義。 |
+| GTFS frequencies and stop times reference | https://gtfs.org/documentation/schedule/reference/#frequenciestxt 與 https://gtfs.org/documentation/schedule/reference/#stop_timestxt | 核對頻密班次的起止時間、班距，以及沒有 frequencies 記錄時的固定開出時間。 |
+| OpenStreetMap Overpass API interpreter | https://overpass-api.de/api/interpreter | 僅在構建審計階段按香港範圍、路線號和公交公司查找缺失巴士 route relation；網頁運行時不調用。 |
+| KMB 91R OSM route relations | https://www.openstreetmap.org/relation/6496237 與 https://www.openstreetmap.org/relation/6498056 | 與本地九巴官方站序交叉核對清水灣、彩明方向；補充社區 GTFS 未包含的 91R 本地真實走線。 |
+| Citybus E18 OSM route relation | https://www.openstreetmap.org/relation/20697949 | 與城巴官方 E18 東涌（翔東邨）至北角碼頭站序核對後，作為本地補充走線。 |
+| Citybus E28 OSM route relation | https://www.openstreetmap.org/relation/20697948 | 與城巴官方 E28 東涌（翔東邨）至將軍澳工業邨站序核對後，作為本地補充走線。 |
+| Official real-time arrival APIs | KMB、Citybus、NLB、MTR Next Train、MTR Light Rail endpoints（見本文件 ETA 章節） | 本階段正式接入最終候選路線：ETA 成功時更新候車時間、總時間和排序；2.8 秒內不可用時回退本地時刻表，避免規劃界面長期卡住。 |
+| Supplemental-route validation result | `app/scripts/build-route-shapes.py`、`app/data/transit.route-shapes/manifest.json` | 目前可靠補入 91R、E18、E28。104R、15B、1P、H2、X9、34S、7S、NB2 屬特別、季節、觀光、墓園或跨境服務且沒有足夠可靠公開 shape，因此繼續從推薦中排除，不以站點折線冒充真實走線。 |
 
 ## 2026-07-07 Route Geometry Reliability Notes
 
@@ -184,8 +184,8 @@
 | MTR official local station data | `app/data/transit.mtr.json` | 本地收錄 98 個港鐵站，加入繁體、簡體常用字、英文站名、`Station` 和站碼別名；由 `app/scripts/verify-search-index.js` 逐站驗證。 |
 | MTR Light Rail local stop data | `app/data/transit.light-rail.json` | 本地收錄 68 個輕鐵站，保持「地區名稱」與「XX站」為不同結果，並逐站驗證。 |
 | KMB, Citybus and New Lantao Bus local stop data | `app/data/transit.kmb.json`, `app/data/transit.citybus.json`, `app/data/transit.nlb.json` | 生成全港本地巴士站搜索項；本階段把先前漏入搜索索引的嶼巴站補回。API 來源見本文交通資料章節。 |
-| ArcGIS World Geocoding and OpenStreetMap Nominatim | 本文「搜索与地址」章節連結 | 只在本地結果顯示後於背景補充店舖、機構、地址和 POI；每次搜索設總時間預算，失敗不阻塞本地結果。 |
-| Photon and OpenStreetMap Overpass runtime audit | 本文「搜索与地址」及 Search Index Update 章節連結 | 2026-07-11 實測 Photon 持續 HTTP 400、Overpass 出現 HTTP 429/timeout，因此不再放入每次網頁搜索的即時請求；Overpass 只保留作離線資料審計/構建參考。 |
+| ArcGIS World Geocoding and OpenStreetMap Nominatim | 本文「搜索與地址」章節連結 | 只在本地結果顯示後於背景補充店舖、機構、地址和 POI；每次搜索設總時間預算，失敗不阻塞本地結果。 |
+| Photon and OpenStreetMap Overpass runtime audit | 本文「搜索與地址」及 Search Index Update 章節連結 | 2026-07-11 實測 Photon 持續 HTTP 400、Overpass 出現 HTTP 429/timeout，因此不再放入每次網頁搜索的即時請求；Overpass 只保留作離線資料審計/構建參考。 |
 | Mapable HK local candidate index | `app/scripts/services/search-service.js`, `app/data/search-index.json` | 以前綴、雙字片段和字符倒排索引先縮小候選，再做排序和模糊匹配，避免每次按鍵對全部地點計算編輯距離。 |
 | HOTOSM Hong Kong Points of Interest export | https://data.humdata.org/dataset/hotosm_hkg_points_of_interest | 下載 2026-05-05 的 points / polygons GeoJSON 靜態包；由 `app/scripts/build-hotosm-search.js` 抽取具名政府/公共機構與景點，並固化到本地搜索資料。資料源為 OpenStreetMap，依 ODbL 使用。 |
 | HOTOSM Hong Kong Buildings export | https://data.humdata.org/dataset/hotosm_hkg_buildings | 下載 2026-05-05 的 buildings polygons GeoJSON 靜態包；抽取及清洗屋苑/住宅主名稱和具名政府建築，不把整個 85 MB 原始包帶到網頁。 |
@@ -235,42 +235,42 @@
 
 ## 2026-07-12 Profile Design Research
 
-| 来源 | 链接 / 位置 | 用途 |
+| 來源 | 鏈接 / 位置 | 用途 |
 | --- | --- | --- |
-| W3C Web Content Accessibility Guidelines 2.2 | https://www.w3.org/TR/WCAG22/ | Profile 界面共同无障碍基线；用于颜色、对比度、页面重排、焦点、触控目标和可访问名称要求。 |
-| W3C - Understanding Use of Color (SC 1.4.1) | https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html | 确认颜色不能作为传达信息、操作、回应或区分元素的唯一视觉方式。 |
-| W3C - Understanding Contrast Minimum (SC 1.4.3) | https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html | 确认普通文字 4.5:1、大字 3:1 的最低对比度。 |
-| W3C - Understanding Non-text Contrast (SC 1.4.11) | https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html | 确认控件和有意义图形与相邻颜色至少 3:1；用于地图路线、边框、图标和焦点。 |
-| W3C - Understanding Reflow (SC 1.4.10) | https://www.w3.org/WAI/WCAG22/Understanding/reflow.html | 用于 400% 放大和窄视口下的内容重排要求。 |
-| W3C - Understanding Focus Visible (SC 2.4.7) | https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html | 用于 Profile、地点输入、路线选择和路线段按钮的键盘焦点设计。 |
-| W3C - Understanding Target Size Minimum (SC 2.5.8) | https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html | 确认指针目标至少 24 x 24 CSS px；本项目主要触控目标计划采用约 44 x 44 px。 |
-| U.S. National Eye Institute - Types of Color Vision Deficiency | https://www.nei.nih.gov/learn-about-eye-health/eye-conditions-and-diseases/color-blindness/types-color-blindness | 核对红绿色觉的 protan/deutan 类型和蓝黄色觉的 tritan 类型。 |
-| Hong Kong Transport Department - Persons with Disabilities | https://www.td.gov.hk/en/road_safety/road_users_code/index/chapter_2_for_pedestrians/persons_with_disabilities/index.html | 核对香港过路处的有声交通灯、触觉装置和震动模式，以及轮椅道路使用提示。 |
-| Hong Kong Transport Department - A Guide to Public Transport for People with Disabilities (2025) | https://www.td.gov.hk/filemanager/en/content_4963/Guidebook%202025%20E%20for%20web.pdf | 香港公共交通无障碍设施总览；用于后续核对港铁、巴士、触觉引路和乘车辅助需求。 |
-| Buildings Department - Design Manual: Barrier Free Access 2008 (2025 Edition) | https://www.bd.gov.hk/doc/en/resources/codes-and-references/code-and-design-manuals/BFA2008_e.pdf | 用于定义无障碍通道、斜道、升降机、触觉引路和入口连接的数据要求。 |
-| OpenStreetMap Wiki - tactile_paving | https://wiki.openstreetmap.org/wiki/Key:tactile_paving | 核对触觉引路带的机器可读标签；当前 CSDI 路网未证明完整覆盖该字段。 |
-| OpenStreetMap Wiki - traffic_signals:sound | https://wiki.openstreetmap.org/wiki/Key:traffic_signals:sound | 核对有声交通灯的机器可读标签；尚未导入运行数据。 |
+| W3C Web Content Accessibility Guidelines 2.2 | https://www.w3.org/TR/WCAG22/ | Profile 界面共同無障礙基線；用於顏色、對比度、頁面重排、焦點、觸控目標和可訪問名稱要求。 |
+| W3C - Understanding Use of Color (SC 1.4.1) | https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html | 確認顏色不能作為傳達信息、操作、回應或區分元素的唯一視覺方式。 |
+| W3C - Understanding Contrast Minimum (SC 1.4.3) | https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html | 確認普通文字 4.5:1、大字 3:1 的最低對比度。 |
+| W3C - Understanding Non-text Contrast (SC 1.4.11) | https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html | 確認控件和有意義圖形與相鄰顏色至少 3:1；用於地圖路線、邊框、圖標和焦點。 |
+| W3C - Understanding Reflow (SC 1.4.10) | https://www.w3.org/WAI/WCAG22/Understanding/reflow.html | 用於 400% 放大和窄視口下的內容重排要求。 |
+| W3C - Understanding Focus Visible (SC 2.4.7) | https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html | 用於 Profile、地點輸入、路線選擇和路線段按鈕的鍵盤焦點設計。 |
+| W3C - Understanding Target Size Minimum (SC 2.5.8) | https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html | 確認指針目標至少 24 x 24 CSS px；本項目主要觸控目標計劃採用約 44 x 44 px。 |
+| U.S. National Eye Institute - Types of Color Vision Deficiency | https://www.nei.nih.gov/learn-about-eye-health/eye-conditions-and-diseases/color-blindness/types-color-blindness | 核對紅綠色覺的 protan/deutan 類型和藍黃色覺的 tritan 類型。 |
+| Hong Kong Transport Department - Persons with Disabilities | https://www.td.gov.hk/en/road_safety/road_users_code/index/chapter_2_for_pedestrians/persons_with_disabilities/index.html | 核對香港過路處的有聲交通燈、觸覺裝置和震動模式，以及輪椅道路使用提示。 |
+| Hong Kong Transport Department - A Guide to Public Transport for People with Disabilities (2025) | https://www.td.gov.hk/filemanager/en/content_4963/Guidebook%202025%20E%20for%20web.pdf | 香港公共交通無障礙設施總覽；用於後續核對港鐵、巴士、觸覺引路和乘車輔助需求。 |
+| Buildings Department - Design Manual: Barrier Free Access 2008 (2025 Edition) | https://www.bd.gov.hk/doc/en/resources/codes-and-references/code-and-design-manuals/BFA2008_e.pdf | 用於定義無障礙通道、斜道、升降機、觸覺引路和入口連接的數據要求。 |
+| OpenStreetMap Wiki - tactile_paving | https://wiki.openstreetmap.org/wiki/Key:tactile_paving | 核對觸覺引路帶的機器可讀標籤；當前 CSDI 路網未證明完整覆蓋該字段。 |
+| OpenStreetMap Wiki - traffic_signals:sound | https://wiki.openstreetmap.org/wiki/Key:traffic_signals:sound | 核對有聲交通燈的機器可讀標籤；尚未導入運行數據。 |
 | Family Health Service, Department of Health - Babycare Facilities in Government Premises | https://www.fhs.gov.hk/tc_chi/breastfeeding/babycare_facilities.json | Direct Traditional Chinese JSON used by `app/scripts/build-babycare-facilities.js`; supplies government venue, address, department and the 2025-12-31 source date. |
 | MTR - Babycare Rooms (Traditional Chinese) | https://www.mtr.com.hk/ch/customer/services/breastfeeding.html | Parsed by the Profile D builder for all 14 listed stations, paid/unpaid-area location text and official station-map links; coordinates come from the local official MTR station dataset. |
 | UNICEF HK - Say Yes To Breastfeeding registered premises | https://www.sayyestobreastfeeding.hk/hk/index.php?route=work_place/equipment | Profile D crawls the public paginated registry and detail pages for venue names, addresses, opening information and publisher-provided coordinates; records are labelled community-program data, not guaranteed babycare rooms. |
 | HKU School of Nursing - BreastfeedingGPS | https://bfci.hku.hk/en/about_bfgps_app/introduction/ | Evaluated as a credible community reference. No public bulk interface or republication permission was found, so its facility database is not copied into the release dataset. |
-| Mapable HK Profile design | `docs-dev/profile.md` | 记录六个 Profile 的硬约束、相对权重、信息栏、视觉变化、母婴室图层、数据缺口和验收矩阵；确认前不实施。 |
+| Mapable HK Profile design | `docs-dev/profile.md` | 記錄六個 Profile 的硬約束、相對權重、信息欄、視覺變化、母嬰室圖層、數據缺口和驗收矩陣；確認前不實施。 |
 | FHS Babycare Facilities information page | https://www.fhs.gov.hk/english/breastfeeding/babycare_facilities_list.html | Confirms the government list is accurate as of 2025-12-31 and provides the disclaimer shown in Profile D source metadata. |
 | UNICEF HK legal matters | https://www.sayyestobreastfeeding.hk/hk/Legal-matters | Checked before import: site content permits personal and educational use; Mapable HK stores attributed text fields only and does not copy UNICEF names, logos or images. |
 | UNICEF HK registered-premise detail pages | https://www.sayyestobreastfeeding.hk/hk/equipment-detail | Publisher detail pages provide venue coordinates and contact/location fields used by the Profile D builder. |
 | Hong Kong International Airport - Nursing Rooms | https://www.hongkongairport.com/tc/passenger-guide/airport-facilities-services/nursing-rooms | Venue-official source confirming 39 rooms grouped across Terminal 1, Terminal 2, T1 Satellite, T1 Midfield and SkyPier; published as five terminal-level records with room counts. |
-| Google Web Search - Hong Kong shopping mall baby care room official | https://www.google.com/search?q=Hong+Kong+shopping+mall+baby+care+room+official | 2026-07-12 用于发现商业场所自己的育婴设施页面；搜索摘要不作为数据源，也不复制到发布数据。 |
-| ELEMENTS - Babies Room | https://www.elementshk.com/eng/elements/services/babies_room | 可信商业场所官方来源；确认圆方在 1 楼水区和 2 楼火区设有两间育婴室。Profile D 仅保存场所、楼层、房间数、官方地点坐标和来源链接，不复制页面图片或营销文字。 |
+| Google Web Search - Hong Kong shopping mall baby care room official | https://www.google.com/search?q=Hong+Kong+shopping+mall+baby+care+room+official | 2026-07-12 用於發現商業場所自己的育嬰設施頁面；搜索摘要不作為數據源，也不複製到發佈數據。 |
+| ELEMENTS - Babies Room | https://www.elementshk.com/eng/elements/services/babies_room | 可信商業場所官方來源；確認圓方在 1 樓水區和 2 樓火區設有兩間育嬰室。Profile D 僅保存場所、樓層、房間數、官方地點座標和來源鏈接，不複製頁面圖片或營銷文字。 |
 | GeoData Store Location Search API | https://geodata.gov.hk/gs/api/v1.0.0/locationSearch | Evaluated for official address geocoding on 2026-07-12 but returned HTTP 503; it is documented but is not a release-build dependency. |
 | Leaflet.markercluster 1.5.3 | https://github.com/Leaflet/Leaflet.markercluster | Mature Leaflet clustering plugin used for low-zoom Profile D facility aggregation; only viewport facilities are inserted into the cluster layer. |
 | Mapable HK babycare facility builder and dataset | `app/scripts/build-babycare-facilities.js`, `app/data/babycare-facilities.json` | Normalizes, deduplicates and source-labels government, transit, community-program and venue-official records; unmapped/low-confidence records remain in data but are excluded from map and route-corridor counts. |
 
 ## 2026-07-13 Routing Performance and Live ETA Verification
 
-| 来源 | 链接 / 位置 | 用途 |
+| 來源 | 鏈接 / 位置 | 用途 |
 | --- | --- | --- |
-| Local routing performance audit | `docs-dev/ROUTING_PERFORMANCE_AUDIT.md`, `app/scripts/verify-route-ranking.js` | 记录巴士空间索引、巴士腿缓存、ETA TTL、Worker 最新请求取消及修复前后性能。 |
-| Local live ETA schema verifier | `app/scripts/verify-live-transit-eta.js` | 直接检查前文登记的九巴、城巴、屿巴、港铁和轻铁官方 ETA API 的 HTTP 状态与响应结构；不生成或转载新的交通数据。 |
+| Local routing performance audit | `docs-dev/ROUTING_PERFORMANCE_AUDIT.md`, `app/scripts/verify-route-ranking.js` | 記錄巴士空間索引、巴士腿緩存、ETA TTL、Worker 最新請求取消及修復前後性能。 |
+| Local live ETA schema verifier | `app/scripts/verify-live-transit-eta.js` | 直接檢查前文登記的九巴、城巴、嶼巴、港鐵和輕鐵官方 ETA API 的 HTTP 狀態與響應結構；不生成或轉載新的交通數據。 |
 
 ## 2026-07-13 Interface Icon System
 
