@@ -8857,6 +8857,7 @@ html[data-contrast-mode="highContrast"] .results-pane .journey-item:is(:hover, .
 }
 
 html[data-contrast-mode="highContrast"] .results-pane .journey-item:is(:hover, .is-active) :is(
+  .journey-operation-status,
   .journey-stops-summary,
   .journey-stops-summary span,
   .journey-transit-stops,
