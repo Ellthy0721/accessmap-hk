@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: light;
   --ui-page-bg: #dce6e1;
   --ui-panel-bg: #ffffff;
@@ -8950,4 +8950,232 @@ html[data-contrast-mode="highContrast"] .walk-segment-features span {
 html[data-contrast-mode="highContrast"] .results-pane .profile-summary {
   border: 2px solid #111111;
   box-shadow: none;
+}
+
+/* Mapable AI Studio promotion shares the lower-left map stack without covering status messages. */
+.map-left-stack {
+  position: absolute;
+  z-index: 420;
+  left: 16px;
+  bottom: 16px;
+  display: grid;
+  gap: 8px;
+  width: min(600px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.map-left-stack > * {
+  pointer-events: auto;
+}
+
+.map-left-stack .map-message-stack {
+  position: static;
+  inset: auto;
+  width: 100%;
+  max-height: none;
+}
+
+.map-left-stack .map-message-stack[hidden] {
+  display: none;
+}
+
+.ai-studio-promo {
+  position: relative;
+  min-height: 88px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 8px;
+  background: #123b3a;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(16, 24, 20, 0.24);
+}
+
+.ai-studio-promo[hidden],
+html[data-contrast-mode="highContrast"] .ai-studio-promo {
+  display: none !important;
+}
+
+.ai-studio-promo-link {
+  display: grid;
+  min-height: 88px;
+  grid-template-columns: minmax(120px, 0.78fr) minmax(0, 1.35fr);
+  align-items: center;
+  gap: 16px;
+  padding: 14px 48px 14px 14px;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 160ms ease;
+}
+
+.ai-studio-promo-link:hover {
+  background: #18514e;
+}
+
+.ai-studio-promo-link:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: -5px;
+}
+
+.ai-studio-promo-logo {
+  display: block;
+  width: min(100%, 156px);
+  height: 54px;
+  justify-self: center;
+  object-fit: contain;
+}
+
+.ai-studio-promo-link strong {
+  display: flex;
+  min-width: 0;
+  min-height: 54px;
+  align-items: center;
+  padding-left: 16px;
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+
+.ai-studio-promo-close {
+  position: absolute;
+  z-index: 2;
+  top: 6px;
+  right: 6px;
+  display: grid;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  min-height: 34px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #ffffff;
+}
+
+.ai-studio-promo-close:hover,
+.ai-studio-promo-close:focus-visible {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.ai-studio-promo-close svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+@media (min-width: 1121px) {
+  .map-left-stack {
+    width: min(600px, max(360px, calc(100vw - 626px)));
+  }
+}
+
+@media (max-width: 1120px) and (orientation: landscape) {
+  .map-left-stack {
+    width: min(600px, max(320px, calc(100vw - 556px)));
+  }
+}
+
+@media (max-width: 1120px) and (orientation: portrait) {
+  .map-left-stack {
+    z-index: 585;
+    right: 8px;
+    bottom: calc(var(--mobile-sheet-medium) + var(--mobile-panel-gap) + 8px);
+    left: 8px;
+    width: auto;
+    transition: bottom 240ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 160ms ease;
+  }
+
+  html[data-mobile-results-state="collapsed"] .map-left-stack {
+    bottom: calc(var(--mobile-sheet-collapsed) + var(--mobile-panel-gap) + 8px);
+  }
+
+  html[data-mobile-results-state="large"] .map-left-stack {
+    bottom: calc(100dvh - var(--mobile-results-large-top, var(--mobile-planner-bottom)) + 8px);
+  }
+
+  html[data-mobile-results-state="expanded"] .map-left-stack {
+    bottom: calc(100dvh - 92px - env(safe-area-inset-top));
+  }
+
+  .ai-studio-promo {
+    min-height: 78px;
+  }
+
+  .ai-studio-promo-link {
+    min-height: 78px;
+    grid-template-columns: minmax(82px, 0.68fr) minmax(0, 1.45fr);
+    gap: 10px;
+    padding: 10px 42px 10px 10px;
+  }
+
+  .ai-studio-promo-logo {
+    width: min(100%, 112px);
+    height: 40px;
+  }
+
+  .ai-studio-promo-link strong {
+    min-height: 44px;
+    padding-left: 10px;
+    font-size: 0.76rem;
+    line-height: 1.38;
+  }
+
+  .ai-studio-promo-close {
+    top: 4px;
+    right: 4px;
+    width: 32px;
+    min-width: 32px;
+    height: 32px;
+    min-height: 32px;
+  }
+
+  html[data-mobile-results-state="large"] .ai-studio-promo,
+  html[data-mobile-results-state="expanded"] .ai-studio-promo,
+  html[data-mobile-results-state="large"] .ai-studio-promo-link,
+  html[data-mobile-results-state="expanded"] .ai-studio-promo-link {
+    min-height: 66px;
+  }
+
+  html[data-mobile-results-state="large"] .ai-studio-promo-link,
+  html[data-mobile-results-state="expanded"] .ai-studio-promo-link {
+    grid-template-columns: minmax(68px, 0.56fr) minmax(0, 1.6fr);
+    gap: 8px;
+    padding: 6px 36px 6px 8px;
+  }
+
+  html[data-mobile-results-state="large"] .ai-studio-promo-logo,
+  html[data-mobile-results-state="expanded"] .ai-studio-promo-logo {
+    width: min(100%, 84px);
+    height: 30px;
+  }
+
+  html[data-mobile-results-state="large"] .ai-studio-promo-link strong,
+  html[data-mobile-results-state="expanded"] .ai-studio-promo-link strong {
+    min-height: 40px;
+    padding-left: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.32;
+  }
+
+  html[data-mobile-results-state="large"] .ai-studio-promo-close,
+  html[data-mobile-results-state="expanded"] .ai-studio-promo-close {
+    width: 28px;
+    min-width: 28px;
+    height: 28px;
+    min-height: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-studio-promo-link,
+  .map-left-stack {
+    transition: none;
+  }
 }

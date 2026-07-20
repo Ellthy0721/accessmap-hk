@@ -10,6 +10,7 @@
   const ROUTE_LABEL_MIN_ZOOM = 11;
   const DEPARTURE_INLINE_MIN_WIDTH = 292;
   const DEPARTURE_SWITCH_DURATION_MS = 340;
+  const AI_STUDIO_PROMO_SESSION_KEY = "mapable-ai-studio-promo-dismissed";
   const DEPARTURE_INPUT_SEGMENTS = Object.freeze([
     { start: 0, end: 4, length: 4 },
     { start: 5, end: 7, length: 2 },
@@ -231,6 +232,7 @@
     document.getElementById("cancel-map-pick").addEventListener("click", () => setPickMode(null));
     document.getElementById("close-map-info")?.addEventListener("click", closeMapInfoOverlay);
     document.getElementById("map-info-content")?.addEventListener("click", handleMapInfoAction);
+    bindAiStudioPromo();
     bindSettingsDialog();
     document.addEventListener("mapable:languagechange", handleLanguageChange);
     document.addEventListener("keydown", (event) => {
@@ -262,6 +264,25 @@
     window.visualViewport?.addEventListener("scroll", scheduleSearchPanelPositioning);
     document.querySelector(".planner-pane .panel-content")?.addEventListener("scroll", scheduleSearchPanelPositioning);
     syncResultsLayoutForViewport();
+  }
+
+  function bindAiStudioPromo() {
+    const promo = document.getElementById("ai-studio-promo");
+    const closeButton = document.getElementById("close-ai-studio-promo");
+    if (!promo || !closeButton) return;
+    try {
+      promo.hidden = sessionStorage.getItem(AI_STUDIO_PROMO_SESSION_KEY) === "1";
+    } catch (_error) {
+      promo.hidden = false;
+    }
+    closeButton.addEventListener("click", () => {
+      promo.hidden = true;
+      try {
+        sessionStorage.setItem(AI_STUDIO_PROMO_SESSION_KEY, "1");
+      } catch (_error) {
+        // Closing still works when session storage is unavailable.
+      }
+    });
   }
 
   function bindSettingsDialog() {

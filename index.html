@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" crossorigin="" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/air-datepicker@3.6.0/air-datepicker.css" />
-    <link rel="stylesheet" href="styles/main.css?v=20260719-13" />
+    <link rel="stylesheet" href="styles/main.css?v=20260720-14" />
   </head>
   <body>
     <a class="skip-link" href="#results-title" data-i18n="skip.results">跳到路線結果</a>
@@ -45,9 +45,20 @@
             </button>
           </div>
         </div>
-        <span id="map-message-anchor" hidden></span>
-        <div class="map-message-stack">
-          <p id="map-status" class="map-status" role="status" aria-live="polite" data-i18n="status.initial">選擇起點和終點後，會顯示建議路線。</p>
+        <div class="map-left-stack">
+          <aside id="ai-studio-promo" class="ai-studio-promo" aria-label="Mapable AI Studio 推介" data-i18n-aria-label="aiStudioPromo.label">
+            <a class="ai-studio-promo-link" href="https://ellthy0721.github.io/Mapable-AI-Studio/" target="_blank" rel="noopener" aria-label="開啟 Mapable AI Studio" title="開啟 Mapable AI Studio" data-i18n-aria-label="aiStudioPromo.open" data-i18n-title="aiStudioPromo.open">
+              <img class="ai-studio-promo-logo" src="assets/logo - AI studio - white.png" alt="Mapable AI Studio" />
+              <strong data-i18n="aiStudioPromo.description">以 Mapable HK 路線證據為基礎的無障礙出行 AI 解說介面</strong>
+            </a>
+            <button id="close-ai-studio-promo" class="ai-studio-promo-close" type="button" aria-label="關閉 Mapable AI Studio 推介" title="關閉 Mapable AI Studio 推介" data-i18n-aria-label="aiStudioPromo.close" data-i18n-title="aiStudioPromo.close">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+            </button>
+          </aside>
+          <span id="map-message-anchor" hidden></span>
+          <div class="map-message-stack">
+            <p id="map-status" class="map-status" role="status" aria-live="polite" data-i18n="status.initial">選擇起點和終點後，會顯示建議路線。</p>
+          </div>
         </div>
       </section>
 
@@ -287,7 +298,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" crossorigin=""></script>
     <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3.6.0/air-datepicker.js"></script>
-    <script src="scripts/services/i18n-service.js?v=20260719-13"></script>
+    <script src="scripts/services/i18n-service.js?v=20260720-14"></script>
     <script src="scripts/services/search-service.js"></script>
     <script src="scripts/services/profile-service.js"></script>
     <script src="scripts/services/babycare-service.js"></script>
@@ -295,6 +306,6 @@
     <script src="scripts/services/route-data-service.js?v=20260719-12"></script>
     <script src="scripts/services/route-service.js?v=20260719-12"></script>
     <script src="scripts/services/route-worker-client.js?v=20260719-12"></script>
-    <script src="scripts/main.js?v=20260719-13"></script>
+    <script src="scripts/main.js?v=20260720-14"></script>
   </body>
 </html>
