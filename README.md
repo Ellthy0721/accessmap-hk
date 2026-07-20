@@ -14,6 +14,17 @@ Mapable HK 是純靜態前端應用，沒有項目自有後端或賬號系統。
 
 > 重要：本項目不是政府、公共交通營辦商、醫療機構或緊急服務的官方產品。路線、無障礙設施、班次、車費及設施狀態均可能變化，出發前應向相關機構核實。
 
+
+## 延伸項目
+
+### Mapable AI Studio
+
+[Mapable AI Studio](https://github.com/Ellthy0721/Mapable-AI-Studio) 是 Mapable HK 的 AI 路線解說延伸介面。它重用 Mapable HK 的搜尋、出行 Profile、路線服務和資料快照，讓使用者連接自己的 AI API，按目前選取的路線生成走法說明、路線優點及注意事項。
+
+AI Studio 會顯示發送給 AI 的路線證據 JSON 和提示詞，也支援語音輸入、建議朗讀，以及整段或分點輸出。AI 只負責解釋 Mapable 已建立的路線，不會改寫路線排序、票價、設施或無障礙事實；Mapable HK 仍是主要路線規劃器。
+
+<p><a href="https://ellthy0721.github.io/Mapable-AI-Studio/">開啟 Mapable AI Studio</a> · <a href="https://github.com/Ellthy0721/Mapable-AI-Studio">查看 GitHub 倉庫</a></p>
+
 ## 主要功能
 
 ### 多模式路線規劃
