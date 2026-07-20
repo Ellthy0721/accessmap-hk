@@ -134,6 +134,16 @@ flowchart LR
 - 本地靜態 JSON 負責地點、交通、票價、出口、設施和步行資料。
 - GitHub Pages 負責靜態部署。
 
+## 開源字體
+
+Mapable 的介面及品牌視覺使用以下開源字體：
+
+- [Staatliches](https://fonts.google.com/specimen/Staatliches)：品牌及展示文字。
+- [Noto Sans SC](https://fonts.google.com/noto/specimen/Noto+Sans+SC)：簡體中文字形。
+- [Noto Sans TC](https://fonts.google.com/noto/specimen/Noto+Sans+TC)：繁體中文字形。
+
+以上字體均依 [SIL Open Font License 1.1](https://openfontlicense.org/) 發佈；字體版權與商標分別歸原作者及權利人所有。
+
 ## 倉庫結構
 
 `main` 分支只保存最終可部署版本，開發過程文件、原始下載及本地構建資料不發佈到 GitHub。

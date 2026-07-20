@@ -216,7 +216,7 @@
 | 來源 | 位置 | 用途 |
 | --- | --- | --- |
 | Mapable HK browser icon | `logo/App/logoroundminimizeddark.png` | 原始正方形深色品牌圖；原比例複製至 `app/assets/favicon.png`，供瀏覽器標籤頁與 GitHub Pages 使用。 |
-| Mapable HK header logo | `logo/App/logoexpandedwhitedark.png` | 原始橫版深色品牌圖；原比例複製至 `app/assets/logoexpandedwhitedark.png`，用於頁面左上標題欄。 |
+| Mapable HK header logos | `logo/App/logoTC.png`、`logo/App/logoSC.png`、`logo/App/logoEN.png` | 繁體、簡體及英文品牌圖；原比例複製至 `assets/logoTC.png`、`assets/logoSC.png` 及 `assets/logoEN.png`，由頁面按目前語言切換。 |
 
 ## 2026-07-11 Public Footbridge Structure Routing
 
