@@ -4000,7 +4000,7 @@
 
   function journeyTransitStopNames(item) {
     return (Array.isArray(item?.stops) ? item.stops : [])
-      .map((name, index) => item?.stopsEn?.[index] || localizedNameText(name))
+      .map((name, index) => localizedNameText(i18n.transitStopName(name, item?.stopsEn?.[index])))
      .filter(Boolean)
      .filter((name, index, names) => index === 0 || name !== names[index - 1]);
   }

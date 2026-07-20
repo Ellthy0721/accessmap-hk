@@ -948,6 +948,13 @@
       .replace(/。/g, ".");
   }
 
+  function transitStopName(name, nameEn = "") {
+    const source = String(name || "").trim();
+    const english = String(nameEn || "").trim();
+    if (currentLanguage === "en" && english) return english;
+    return dataText(source);
+  }
+
   applyDocument(document);
 
   window.MapableI18n = Object.freeze({
@@ -962,6 +969,7 @@
     toSimplified,
     placeName,
     placeAddress,
-    dataText
+    dataText,
+    transitStopName
   });
 })();
